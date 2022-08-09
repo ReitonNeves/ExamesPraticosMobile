@@ -1,0 +1,152 @@
+package br.gov.ma.detran.examespraticosmobile.dao.rest;
+
+import android.util.Base64;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
+
+import br.gov.ma.detran.examespraticosmobile.modelo.AGC_Prova_Candidato;
+import br.gov.ma.detran.examespraticosmobile.util.ConstantesUtil;
+import br.gov.ma.detran.examespraticosmobile.util.NegocioException;
+import br.gov.ma.detran.examespraticosmobile.util.RedeUtil;
+
+public class AGC_Provas_CandidatosRest {
+
+    private String mensagemRespostaRest = "Não foi possível obter resposta dos dados da Agendas.";
+
+    ConstantesUtil constantesUtil = new ConstantesUtil();
+
+    public List<AGC_Prova_Candidato> retornarAgendaDosCandidatosDistribuidos(String dataExameInicial, String dataExameFinal, String cpfExaminador1, String cpfExaminador2, String tipoExame, String localExame) throws JSONException, NegocioException {
+
+        String url = constantesUtil.URL_REST + "/AGCProvaCandidatoRest/retornarAgendaDosCandidatosDistribuidos/" +
+                cpfExaminador1 + "/" +
+                cpfExaminador2 + "/" +
+                dataExameInicial + "/" +
+                dataExameFinal + "/" +
+                localExame + "/" +
+                tipoExame;
+
+        String resposta = RedeUtil.getJSONFromAPI(url, "POST");
+
+        if (resposta.equals("")){
+            throw new NegocioException(mensagemRespostaRest);
+        }
+
+        List<AGC_Prova_Candidato> agcProvaCandidatoList = parseJson(resposta);
+        System.out.println(new StringBuilder().append("RespostaAAAAA: ").append(parseJson(resposta)).toString());
+        return agcProvaCandidatoList;
+
+    }
+
+    public void alterarSituacaoDoCandidatoParaSincronizadoNoRestService(String listaIdCandidatos) throws NegocioException {
+
+        String url = constantesUtil.URL_REST + "/AGCProvaCandidatoRest/alterarSituacaoDoCandidatoParaSincronizado/" +
+                listaIdCandidatos;
+
+        String resposta = RedeUtil.getJSONFromAPI(url, "POST");
+
+        if (resposta.equals("ok") == false){
+            throw new NegocioException(mensagemRespostaRest);
+        }
+
+    }
+
+    public void alterarSituacaoDoCandidatoParaFechadoNoRestService(AGC_Prova_Candidato agcProvaCandidato) throws NegocioException, UnsupportedEncodingException {
+
+        String url = constantesUtil.URL_REST + "/AGCProvaCandidatoRest/alterarSituacaoDoCandidatoParaFechado/" +
+                agcProvaCandidato.getCpfCandidato() + "/" +
+                agcProvaCandidato.getDataExame() + "/" +
+                agcProvaCandidato.getLocalExame() + "/" +
+                agcProvaCandidato.getTipoExame() + "/" +
+                agcProvaCandidato.getResultado() + "/" +
+                URLEncoder.encode(agcProvaCandidato.getObservacoes(), "UTF-8") + "/" +
+                URLEncoder.encode(agcProvaCandidato.getPlaca(), "UTF-8") + "/" +
+                agcProvaCandidato.getHoraInicioExame() + "/" +
+                agcProvaCandidato.getHoraFimExame()+ "/" +
+                agcProvaCandidato.getCpfEnvioExame() + "/" +
+                URLEncoder.encode(agcProvaCandidato.getDataHoraEnvioExame(), "UTF-8")
+                ;
+
+        String resposta = RedeUtil.getJSONFromAPI(url, "POST");
+
+        if (resposta.equals("ok") == false){
+            if (resposta.isEmpty()) {
+                throw new NegocioException(mensagemRespostaRest);
+            } else {
+                throw new NegocioException(resposta);
+            }
+        }
+
+    }
+
+
+    private List<AGC_Prova_Candidato> parseJson(String json) throws JSONException {
+
+        List<AGC_Prova_Candidato> agcProvaCandidatoList = null;
+
+        JSONObject jsonObj = new JSONObject(json.replace("[", "{\"root\": [").replace("]", "]}"));
+
+        JSONArray array = jsonObj.getJSONArray("root");
+
+        if (array.length() == 0){
+            return null;
+        } else {
+            agcProvaCandidatoList = manipularJSONArray(array);
+        }
+
+        return agcProvaCandidatoList;
+
+    }
+
+    private List<AGC_Prova_Candidato> manipularJSONArray(JSONArray jsonArray) throws JSONException {
+
+        List<AGC_Prova_Candidato> agcProvaCandidatoList = new ArrayList<AGC_Prova_Candidato>();
+
+        for (int i = 0; i <= jsonArray.length() - 1; i++) {
+
+            JSONObject objArray = jsonArray.getJSONObject(i);
+            System.out.println(new StringBuilder().append("JSON: ").append(objArray));
+            AGC_Prova_Candidato agcProvaCandidato = new AGC_Prova_Candidato(
+                    objArray.getLong("id"),
+                    objArray.getString("cpfCandidato"),
+                    objArray.getString("dataExame"),
+                    objArray.getString("localExame"),
+                    objArray.getString("tipoExame"),
+                    objArray.getString("turma"),
+                    objArray.getString("renach"),
+                    objArray.getString("nome"),
+                    objArray.getString("categoria"),
+                    objArray.getString("nomeCFC"),
+                    objArray.getString("codigoCFC"),
+                    objArray.getString("validadeLADV"),
+                    objArray.getString("situacao"),
+                    objArray.getString("resultado"),
+                    objArray.getString("cpfExaminador1"),
+                    objArray.getString("cpfExaminador2"),
+                    objArray.getString("observacoes"),
+                    objArray.getString("placa"),
+                    objArray.getString("horaInicioExame"),
+                    objArray.getString("horaFimExame"),
+                    objArray.getString("cpfEnvioExame"),
+                    objArray.getString("dataHoraEnvioExame"),
+                    objArray.getString("cpfDistribuicao"),
+                    objArray.getString("dataHoraDistribuicaoAgenda"),
+                    objArray.getString("cpfInclusao"),
+                    objArray.getString("dataHoraInclusaoAgenda")
+            );
+
+            agcProvaCandidatoList.add(agcProvaCandidato);
+
+        }
+
+        return agcProvaCandidatoList;
+
+    }
+
+}

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".views.SelecionarCandidatoActivity"
+
+    >
+<!--  tools:showIn="@layout/activity_selecionar_candidato -->
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorBlue"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:checkedButton="@+id/radExame2Rodas"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radExame2Rodas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/radioText2Rodas" />
+
+                <RadioButton
+                    android:id="@+id/radExame4Rodas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/radioText4Rodas"
+                    android:textStyle="normal" />
+
+            </RadioGroup>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/txtDataExame"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/textHintDataExame"
+                android:inputType="date" />
+
+            <EditText
+                android:id="@+id/txtTurma"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/textoHintTurmaOpcional"
+                android:inputType="time" />
+
+            <ImageButton
+                android:id="@+id/btnBuscar"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_light"
+                android:contentDescription="@string/botaoBuscar"
+                app:srcCompat="@android:drawable/ic_menu_search" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp"
+            android:lineSpacingExtra="18sp"
+            android:text="@string/clique_em_um_dos_candidatos_na_lista_abaixo"
+            android:textSize="18sp"
+            android:typeface="sans" />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

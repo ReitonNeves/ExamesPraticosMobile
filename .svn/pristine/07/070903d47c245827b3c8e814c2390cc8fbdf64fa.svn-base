@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".views.HomeActivity"
+    tools:showIn="@layout/app_bar_home"
+
+    >
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnSincronizarAgenda"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/botaoSincronizar" />
+
+            <Button
+                android:id="@+id/btnAplicarProva"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/botaoAplicarProva" />
+
+            <Button
+                android:id="@+id/btnFecharProva"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/botaoFecharProva" />
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

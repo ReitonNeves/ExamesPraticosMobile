@@ -1,0 +1,333 @@
+package br.gov.ma.detran.examespraticosmobile.sqlite.operations;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import br.gov.ma.detran.examespraticosmobile.modelo.AGC_Prova_Candidato;
+import br.gov.ma.detran.examespraticosmobile.modelo.AGC_Usuario;
+import br.gov.ma.detran.examespraticosmobile.modeloEspecializada.ListViewFechar;
+import br.gov.ma.detran.examespraticosmobile.sqlite.contract.AGC_Provas_CandidatosContract;
+import br.gov.ma.detran.examespraticosmobile.sqlite.contract.AGC_UsuariosContract;
+import br.gov.ma.detran.examespraticosmobile.sqlite.handler.AGC_ExamesPraticosDbHandler;
+import br.gov.ma.detran.examespraticosmobile.util.DataHoraUtil;
+import br.gov.ma.detran.examespraticosmobile.util.NegocioException;
+
+public class AGC_Provas_CandidatosOperations {
+
+    public static final String LOGTAG = "EMP_MNGMNT_SYS";
+
+    private SQLiteOpenHelper dbhandler;
+    private SQLiteDatabase database;
+
+    public AGC_Provas_CandidatosOperations(Context context){
+        dbhandler = new AGC_ExamesPraticosDbHandler(context);
+    }
+
+    public void open(){
+        Log.i(LOGTAG,"Database Opened");
+        database = dbhandler.getWritableDatabase();
+    }
+
+    public void close(){
+        Log.i(LOGTAG, "Database Closed");
+        dbhandler.close();
+    }
+
+    public void inserir(AGC_Prova_Candidato agcProvaCandidato) throws NegocioException {
+
+        ContentValues contentValues = manipularContentValues(agcProvaCandidato);
+
+        final long insert = database.insert(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.TABLE_NAME, null, contentValues);
+
+        if (insert ==-1)
+            throw new NegocioException("Erro ao inserir registro");
+    }
+
+    public void limparTabela() throws NegocioException {
+        final int delete = database.delete(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.TABLE_NAME, null, null);
+        if (delete ==-1)
+            throw new NegocioException("Erro ao deletar registros");
+
+    }
+
+    public void iniciarProvaCandidato(AGC_Prova_Candidato agcProvaCandidato) throws NegocioException {
+
+        agcProvaCandidato.setHoraInicioExame(DataHoraUtil.retornarHoraAtual_HHmmss());
+        agcProvaCandidato.setSituacao("I");
+        atualizar(agcProvaCandidato);
+
+    }
+
+    public void atualizarDigital(byte[] imagemDigital, String idCandidato) throws NegocioException {
+        AGC_Prova_Candidato prova = retornarPorID(idCandidato);
+        prova.setImagemDigital(imagemDigital);
+        atualizar(prova);
+    }
+
+
+    public void atualizar(AGC_Prova_Candidato agcProvaCandidato) throws NegocioException {
+
+        ContentValues contentValues = manipularContentValues(agcProvaCandidato);
+
+        final long update = database.update(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.TABLE_NAME,
+                contentValues,
+                AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_ID + " = ? ",
+                new String[]{agcProvaCandidato.getId().toString()}
+                );
+
+        if (update ==-1)
+            throw new NegocioException("Erro ao atualizar registro");
+
+    }
+
+    public Boolean verificarSeExistemAgendasPendentesDeEnvioNoTablet(){
+
+        String sql = "select * from " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.TABLE_NAME
+                + " where " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_SITUACAO
+                + " <> 'F'";
+
+        //Cursor cursor = database.rawQuery(sql, null);
+
+        List<AGC_Prova_Candidato> lista = retornarLista_AGCProvaCandidato(sql, null);
+
+        Boolean retorno;
+        if (lista != null && lista.size() > 0){
+            retorno = true;
+        } else {
+            retorno = false;
+        }
+
+        return retorno;
+
+    }
+
+    public List<AGC_Prova_Candidato> retornarTodosAgendadosParaExaminador(String data, String tipoExame, String examinador){
+
+        String sql = "select * from "+ AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.TABLE_NAME
+                + " where " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_SITUACAO + " = 'S' "
+                + " and " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_DATA_EXAME + " = ? "
+                + " and " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_TIPO_EXAME + " = ? "
+                + " and (" + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CPF_EXAMINADOR_1 + " = ? or " +
+                AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CPF_EXAMINADOR_2 + " = ?) "
+                + " order by " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_NOME;
+
+        return retornarLista_AGCProvaCandidato(sql, new String[] {data, tipoExame, examinador, examinador});
+
+    }
+
+    public List<AGC_Prova_Candidato> retornarTodosAgendadosParaExaminador(String data, String tipoExame, String turma, String examinador){
+
+        String sql = "select * from "+ AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.TABLE_NAME
+                + " where " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_SITUACAO + " = 'S' "
+                + " and " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_DATA_EXAME + " = ? "
+                + " and " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_TIPO_EXAME + " = ? "
+                + " and " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_TURMA + " = ? "
+                + " and (" + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CPF_EXAMINADOR_1 + " = ? or " +
+                AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CPF_EXAMINADOR_2 + " = ?) "
+                + " order by " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_NOME;
+
+        return retornarLista_AGCProvaCandidato(sql, new String[] {data, tipoExame, turma, examinador, examinador});
+
+    }
+
+    public List<ListViewFechar> retornarTodosAgendadosParaFechar(){
+
+        String sql = "select * from "+ AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.TABLE_NAME
+                + " where " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_SITUACAO + " = 'P' "
+                + " order by " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_NOME;
+
+        Cursor cursor = database.rawQuery(sql, null);
+
+        List<ListViewFechar> lista = null;
+        ListViewFechar listViewFechar;
+        if(cursor.getCount() > 0) {
+            lista = new ArrayList<>();
+            while (cursor.moveToNext()) {
+
+                listViewFechar = new ListViewFechar();
+
+                listViewFechar.setNomeCandidato(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_NOME)));
+
+                listViewFechar.setAgcProvaCandidato(setCursor(cursor));
+
+                String resultado = cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_RESULTADO));
+                if (resultado.equals("1")){
+                    listViewFechar.setResultado("Aprovado");
+                } else if (resultado.equals("2")){
+                    listViewFechar.setResultado("Reprovado");
+                } else if (resultado.equals("3")){
+                    listViewFechar.setResultado("Ausente");
+                } else {
+                    listViewFechar.setResultado("");
+                }
+
+                lista.add(listViewFechar);
+            }
+        }
+
+        cursor.close();
+
+        return lista;
+
+    }
+
+    public List<AGC_Prova_Candidato> listarTodos(){
+
+        String sql = "select * from "+ AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.TABLE_NAME
+                + " order by " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_ID;
+
+        return retornarLista_AGCProvaCandidato(sql, null);
+
+    }
+
+    public AGC_Prova_Candidato retornarPorID(String id){
+
+        String sql = "select * from "+ AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.TABLE_NAME
+                + " where " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_ID + " = ? ";
+
+        return retornarAGCProvaCandidato(sql, new String[] {id});
+
+    }
+
+    public AGC_Prova_Candidato retornarProvaIniciada(){
+
+        String sql = "select * from "+ AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.TABLE_NAME
+                + " where " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_SITUACAO + " = 'I' "
+                ;
+
+        return retornarAGCProvaCandidato(sql, null);
+
+    }
+
+    private AGC_Prova_Candidato retornarAGCProvaCandidato(String sql, String[] argumentos){
+
+        Cursor cursor = database.rawQuery(sql, argumentos);
+
+        AGC_Prova_Candidato agcProvaCandidato = manipularCursor(cursor);
+
+        cursor.close();
+
+        return agcProvaCandidato;
+
+    }
+
+    private List<AGC_Prova_Candidato>
+    retornarLista_AGCProvaCandidato(String sql, String[] argumentos){
+
+        Cursor cursor = database.rawQuery(sql, argumentos);
+
+        List<AGC_Prova_Candidato> lista = manipularCursorList(cursor);
+
+        cursor.close();
+
+        return lista;
+
+    }
+
+    private List<AGC_Prova_Candidato> manipularCursorList(Cursor cursor){
+
+        List<AGC_Prova_Candidato> lista = null;
+
+        if(cursor.getCount() > 0) {
+            lista = new ArrayList<AGC_Prova_Candidato>();
+            while (cursor.moveToNext()) {
+                AGC_Prova_Candidato agcProvaCandidato = new AGC_Prova_Candidato();
+                agcProvaCandidato = setCursor(cursor);
+                lista.add(agcProvaCandidato);
+            }
+        }
+
+        return lista;
+
+    }
+
+    private AGC_Prova_Candidato manipularCursor(Cursor cursor){
+
+        AGC_Prova_Candidato agcProvaCandidato = null;
+
+        if (cursor.moveToNext()) {
+                agcProvaCandidato = new AGC_Prova_Candidato();
+                agcProvaCandidato = setCursor(cursor);
+        }
+
+        return agcProvaCandidato;
+
+    }
+
+    private AGC_Prova_Candidato setCursor(Cursor cursor){
+
+        AGC_Prova_Candidato agcProvaCandidato = null;
+
+        agcProvaCandidato = new AGC_Prova_Candidato();
+        agcProvaCandidato.setId(cursor.getLong(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_ID)));
+        agcProvaCandidato.setCategoria(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CATEGORIA)));
+        agcProvaCandidato.setCodigoCfc(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CODIGO_CFC)));
+        agcProvaCandidato.setCpfCandidato(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CPF_CANDIDATO)));
+        agcProvaCandidato.setCpfDistribuicao(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CPF_DISTRIBUICAO)));
+        agcProvaCandidato.setCpfEnvioExame(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CPF_ENVIO_EXAME)));
+        agcProvaCandidato.setCpfExaminador1(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CPF_EXAMINADOR_1)));
+        agcProvaCandidato.setCpfExaminador2(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CPF_EXAMINADOR_2)));
+        agcProvaCandidato.setCpfInclusao(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CPF_INCLUSAO)));
+        agcProvaCandidato.setDataExame(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_DATA_EXAME)));
+        agcProvaCandidato.setDataHoraDistribuicaoAgenda(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_DATA_HORA_DISTRIBUICAO_AGENDA)));
+        agcProvaCandidato.setDataHoraEnvioExame(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_DATA_HORA_ENVIO_EXAME)));
+        agcProvaCandidato.setDataHoraInclusaoAgenda(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_DATA_HORA_INCLUSAO_AGENDA)));
+        agcProvaCandidato.setHoraFimExame(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_HORA_FIM_EXAME)));
+        agcProvaCandidato.setHoraInicioExame(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_HORA_INICIO_EXAME)));
+        agcProvaCandidato.setLocalExame(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_LOCAL_EXAME)));
+        agcProvaCandidato.setNome(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_NOME)));
+        agcProvaCandidato.setNomeCfc(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_NOME_CFC)));
+        agcProvaCandidato.setObservacoes(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_OBSERVACOES)));
+        agcProvaCandidato.setPlaca(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_PLACA)));
+        agcProvaCandidato.setRenach(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_RENACH)));
+        agcProvaCandidato.setResultado(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_RESULTADO)));
+        agcProvaCandidato.setSituacao(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_SITUACAO)));
+        agcProvaCandidato.setTipoExame(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_TIPO_EXAME)));
+        agcProvaCandidato.setTurma(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_TURMA)));
+        agcProvaCandidato.setValidadeLadv(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_VALIDADE_LADV)));
+        agcProvaCandidato.setImagemDigital(cursor.getBlob(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_IMAGEM_DIGITAL)));
+
+        return agcProvaCandidato;
+
+    }
+
+    private ContentValues manipularContentValues(AGC_Prova_Candidato agcProvaCandidato){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_ID, agcProvaCandidato.getId());
+        contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CPF_CANDIDATO, agcProvaCandidato.getCpfCandidato());
+        contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_DATA_EXAME, agcProvaCandidato.getDataExame());
+        contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_LOCAL_EXAME, agcProvaCandidato.getLocalExame());
+        contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_TIPO_EXAME, agcProvaCandidato.getTipoExame());
+        contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_TURMA, agcProvaCandidato.getTurma());
+        contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_RENACH, agcProvaCandidato.getRenach());
+        contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_NOME, agcProvaCandidato.getNome());
+        contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CATEGORIA, agcProvaCandidato.getCategoria());
+        contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_NOME_CFC, agcProvaCandidato.getNomeCfc());
+        contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CODIGO_CFC, agcProvaCandidato.getCodigoCfc());
+        contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_VALIDADE_LADV, agcProvaCandidato.getValidadeLadv());
+        contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_SITUACAO, agcProvaCandidato.getSituacao());
+        contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_RESULTADO, agcProvaCandidato.getResultado());
+        contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CPF_EXAMINADOR_1, agcProvaCandidato.getCpfExaminador1());
+        contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CPF_EXAMINADOR_2, agcProvaCandidato.getCpfExaminador2());
+        contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_OBSERVACOES, agcProvaCandidato.getObservacoes());
+        contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_PLACA, agcProvaCandidato.getPlaca());
+        contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_HORA_INICIO_EXAME, agcProvaCandidato.getHoraInicioExame());
+        contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_HORA_FIM_EXAME, agcProvaCandidato.getHoraFimExame());
+        contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CPF_ENVIO_EXAME, agcProvaCandidato.getCpfEnvioExame());
+        contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_DATA_HORA_ENVIO_EXAME, agcProvaCandidato.getDataHoraEnvioExame());
+        contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CPF_DISTRIBUICAO, agcProvaCandidato.getCpfDistribuicao());
+        contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_DATA_HORA_DISTRIBUICAO_AGENDA, agcProvaCandidato.getDataHoraDistribuicaoAgenda());
+        contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CPF_INCLUSAO, agcProvaCandidato.getCpfInclusao());
+        contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_DATA_HORA_INCLUSAO_AGENDA, agcProvaCandidato.getDataHoraInclusaoAgenda());
+        contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_IMAGEM_DIGITAL, agcProvaCandidato.getImagemDigital());
+        return contentValues;
+    }
+
+}
