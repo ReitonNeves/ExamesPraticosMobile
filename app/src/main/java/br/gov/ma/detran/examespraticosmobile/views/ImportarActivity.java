@@ -6,8 +6,8 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -15,14 +15,23 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 import br.gov.ma.detran.examespraticosmobile.R;
 import br.gov.ma.detran.examespraticosmobile.modelo.AGC_LocalDeProva;
 import br.gov.ma.detran.examespraticosmobile.modelo.AGC_Usuario;
 import br.gov.ma.detran.examespraticosmobile.service.AGC_LocalDeProvaService;
 import br.gov.ma.detran.examespraticosmobile.sincronizacao.AGC_Provas_CandidatosSinc;
+import br.gov.ma.detran.examespraticosmobile.util.ColorStatusBarUtil;
+import br.gov.ma.detran.examespraticosmobile.util.DataHoraUtil;
 import br.gov.ma.detran.examespraticosmobile.util.MaskEditUtil;
 import br.gov.ma.detran.examespraticosmobile.util.MensagemErroUtil;
 import br.gov.ma.detran.examespraticosmobile.util.MensagemOkUtil;
@@ -35,6 +44,7 @@ public class ImportarActivity extends AppCompatActivity {
     private EditText mTextDataExameFinal;
     private EditText mTextCpfExaminador1;
     private EditText mTextCpfExaminador2;
+    private RadioGroup radioGroup;
     private RadioButton mExame2Rodas;
     private RadioButton mExame4Rodas;
     private EditText mLocalExame;
@@ -58,15 +68,17 @@ public class ImportarActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);      //Ativar o botão
         getSupportActionBar().setTitle("Importar Agenda de Exames");
 
+        ColorStatusBarUtil.setColorStatusBar(this);
+
         mProgressView = this.findViewById(R.id.progressBarImportar);
         mFormView = this.findViewById(R.id.formContentImportar);
+        radioGroup = findViewById(R.id.radioGroup);
 
         try {
-
             mTextDataExameInicial_addTextChangedListener();
             mTextDataExameFinal_addTextChangedListener();
-            mTextCpfExaminador1_addTextChangedListener();
-            mTextCpfExaminador2_addTextChangedListener();
+            //mTextCpfExaminador1_addTextChangedListener();
+            //mTextCpfExaminador2_addTextChangedListener();
 
             btnImportar_setOnClickListener();
 
@@ -75,7 +87,6 @@ public class ImportarActivity extends AppCompatActivity {
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, locais);
             AutoCompleteTextView textView = this.findViewById(R.id.autoCompleteLocalDeProva);
             textView.setAdapter(adapter);
-
         } catch (Exception ex){
             ex.printStackTrace();
             MensagemErroUtil.mostrar(ex.getMessage(), this);
@@ -86,12 +97,10 @@ public class ImportarActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-
         final AGC_Usuario agcUsuario = ParametrosAcessoUtil.getAgcUsuarioLogado();
         if (agcUsuario == null) {
             direcionarParaLogin();
         }
-
     }
 
     @Override
@@ -111,88 +120,75 @@ public class ImportarActivity extends AppCompatActivity {
     }
 
     public String[] listarTodosOsLocaisDeProvas() throws NegocioException {
-
         List<AGC_LocalDeProva> agcLocalDeProvaList = agcLocalDeProvaService.retornarTodosOrdenadoPorDescricao(this);
-
         String[] lista = new String[agcLocalDeProvaList.size()];
         for (int i = 0; i < agcLocalDeProvaList.size(); i++){
             lista[i] = agcLocalDeProvaList.get(i).getDescricao();
         }
-
         return lista;
-
     }
 
     private void btnImportar_setOnClickListener(){
-
         mBotaoImportar = this.findViewById(R.id.btnImportarAgendas);
         mBotaoImportar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Connection connection = null;
                 mTextDataExameInicial = findViewById(R.id.txtDataExameInicial);
                 mTextDataExameFinal = findViewById(R.id.txtDataExameFinal);
-
-                mTextCpfExaminador1 = findViewById(R.id.txtCpfExaminador1);
-                mTextCpfExaminador2 = findViewById(R.id.txtCpfExaminador2);
-                mExame2Rodas = findViewById(R.id.radExame2Rodas);
-                mExame4Rodas = findViewById(R.id.radExame4Rodas);
+                String tipoExame  = findViewById(radioGroup.getCheckedRadioButtonId()).getTag().toString();
+                //mExame2Rodas = findViewById(R.id.radExame2Rodas);
+                //mExame4Rodas = findViewById(R.id.radExame4Rodas);
                 mLocalExame= findViewById(R.id.autoCompleteLocalDeProva);
 
-                try {
+                /*try {
+                    Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+                    connection = DriverManager.getConnection("jdbc:sqlserver://10.39.11.72:1433;databaseName=dbDetranNet;encrypt=false;useSSL=false", "DETRAN_reiton", "rnm8eletro");
+                    PreparedStatement pstmt = connection.prepareStatement("{call dbo.stp_Ren_TurmaPratico_Rel()}");
+                    ResultSet rs = pstmt.executeQuery();
+                } catch(SQLException e){
+                    e.printStackTrace();
+                } catch(ClassNotFoundException e ){
+                    e.printStackTrace();
+                }*/
 
+                try {
                    final AGC_Usuario agcUsuario = ParametrosAcessoUtil.getAgcUsuarioLogado();
-                    if (agcUsuario != null && agcUsuario.getTipoUsuario().equals("E")) {
+                    if (agcUsuario != null && agcUsuario.getTipoUsuario().equals("")) {//Alterado para testes
                         MensagemErroUtil.mostrar("Somente usuários com perfil Gestor podem utilizar este recurso.", view.getContext());
                     } else {
-
-                        String tipoExame = "";
+                        /*String tipoExame = "";
                         if (mExame2Rodas.isChecked()) {
                             tipoExame = "1";
                         } else if (mExame4Rodas.isChecked()) {
                             tipoExame = "2";
+                        }*/
+
+                        String dataExameInicial = DataHoraUtil.formataData(mTextDataExameInicial.getText().toString());
+                        String dataExameFinal = DataHoraUtil.formataData(mTextDataExameFinal.getText().toString());
+
+
+                        AGC_LocalDeProva agcLocalDeProva = agcLocalDeProvaService.retornarPorDescricao(mLocalExame.getText().toString(), view.getContext());
+                        if (agcLocalDeProva == null) {
+                            throw new NegocioException("Local não informado ou inválido.");
                         }
-
-                        String dataExameInicial = formataData(mTextDataExameInicial.getText().toString());
-                        String dataExameFinal = formataData(mTextDataExameFinal.getText().toString());
-
-                        if (dataExameInicial.isEmpty() || dataExameFinal.isEmpty()) {
-                            MensagemErroUtil.mostrar("Data Inicial e Final devem ser informadas no formadao dd/mm/yyyy", view.getContext());
-                        } else {
-                            AGC_LocalDeProva agcLocalDeProva = agcLocalDeProvaService.retornarPorDescricao(mLocalExame.getText().toString(), view.getContext());
-                            if (agcLocalDeProva == null){
-                                throw new NegocioException("Local não informado ou inválido.");
-                            }
-                            agcProvasCandidatosSinc.sincronizarAgendas(dataExameInicial, dataExameFinal, mTextCpfExaminador1.getText().toString(), mTextCpfExaminador2.getText().toString(), tipoExame, agcLocalDeProva.getId().toString(), view.getContext());
-                        }
-
+                        agcProvasCandidatosSinc.sincronizarAgendas(dataExameInicial, dataExameFinal, agcLocalDeProva.getId().toString(), tipoExame, view.getContext());
                         MensagemOkUtil.mostrar("Agendas Sincronizadas com sucesso.", view.getContext());
-                    }
 
+                    }
                 } catch (Exception ex){
                     ex.printStackTrace();
                     MensagemErroUtil.mostrar(ex.getMessage(), view.getContext());
                 }
             }
         });
-
     }
 
-    private String formataData(String data) {
-        if (data == null || data.isEmpty() || data.length() != 10){
-            return "";
+    private String formataData(String data) throws Exception {
+        if (Objects.isNull(data) || data.isEmpty()){
+            throw new Exception("Data inválida.");
         }
         return data.substring(6, 10) + "-" + data.substring(3,5) + "-" + data.substring(0,2);
-    }
-
-    private void mTextCpfExaminador1_addTextChangedListener(){
-        mTextCpfExaminador1 = this.findViewById(R.id.txtCpfExaminador1);
-        mTextCpfExaminador1.addTextChangedListener(MaskEditUtil.mask(mTextCpfExaminador1, MaskEditUtil.FORMAT_CPF));
-    }
-
-    private void mTextCpfExaminador2_addTextChangedListener(){
-        mTextCpfExaminador2 = this.findViewById(R.id.txtCpfExaminador2);
-        mTextCpfExaminador2.addTextChangedListener(MaskEditUtil.mask(mTextCpfExaminador2, MaskEditUtil.FORMAT_CPF));
     }
 
     private void mTextDataExameInicial_addTextChangedListener(){

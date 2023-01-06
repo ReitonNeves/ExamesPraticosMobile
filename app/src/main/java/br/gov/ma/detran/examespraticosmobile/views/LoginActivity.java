@@ -6,10 +6,13 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -22,6 +25,7 @@ import java.nio.channels.FileChannel;
 import br.gov.ma.detran.examespraticosmobile.R;
 import br.gov.ma.detran.examespraticosmobile.modelo.AGC_Usuario;
 import br.gov.ma.detran.examespraticosmobile.service.AGC_UsuariosService;
+import br.gov.ma.detran.examespraticosmobile.util.ColorStatusBarUtil;
 import br.gov.ma.detran.examespraticosmobile.util.MensagemErroUtil;
 import br.gov.ma.detran.examespraticosmobile.util.NegocioException;
 import br.gov.ma.detran.examespraticosmobile.util.ParametrosAcessoUtil;
@@ -42,6 +46,17 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        /*if (android.os.Build.VERSION.SDK_INT > 9)
+        {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+            Window window = this.getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(this.getResources().getColor(R.color.colorPrimary));
+        }*/
+        ColorStatusBarUtil.setColorStatusBar(this);
+
         mProgressView = findViewById(R.id.progressBarLogin);
         mLoginFormView = findViewById(R.id.formLogin);
 
@@ -55,18 +70,14 @@ public class LoginActivity extends AppCompatActivity {
                 entrar();
             }
         });
-
         copyFile();
-
     }
 
     public void copyFile() {
-        try
-        {
+        try {
             File sd = Environment.getExternalStorageDirectory();
             File data = Environment.getDataDirectory();
             File doc = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download");
-
 
             //if (sd.canWrite())
             //{
@@ -91,9 +102,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void entrar(){
-
         try {
-
             String login = mLoginView.getText().toString();
             String senha = mPasswordView.getText().toString();
             String senhaMD5 = SenhaUtil.gerarMD5(senha);
@@ -108,7 +117,6 @@ public class LoginActivity extends AppCompatActivity {
                 parametrosAcessoUtil.setAgcUsuarioLogado(agcUsuario);
                 direcionaParaHome();
             }
-
         } catch (NegocioException ex){
             ex.printStackTrace();
             MensagemErroUtil.mostrar(ex.getMessage(), this);
@@ -116,7 +124,6 @@ public class LoginActivity extends AppCompatActivity {
             ex.printStackTrace();
             MensagemErroUtil.mostrar("Erro: Tarefa não pode ser executada.", this);
         }
-
     }
 
     private void direcionaParaHome(){

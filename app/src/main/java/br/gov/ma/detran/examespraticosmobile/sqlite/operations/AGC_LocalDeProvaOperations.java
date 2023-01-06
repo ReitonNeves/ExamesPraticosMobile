@@ -114,7 +114,6 @@ public class AGC_LocalDeProvaOperations {
     }
 
     public List<AGC_LocalDeProva> retornarTodosOrdenadoPorDescricao(){
-
         String sql = "select * from " + AGC_LocalDeProvaContract.AGC_LocalDeProvaEntry.TABLE_NAME
                 + " order by " + AGC_LocalDeProvaContract.AGC_LocalDeProvaEntry.COLUMN_DESCRICAO;
 
@@ -131,11 +130,9 @@ public class AGC_LocalDeProvaOperations {
                 agcLocalDeProvaList.add(agcLocalDeProva);
             }
         }
-
         cursor.close();
 
         return agcLocalDeProvaList;
-
     }
 
     public void limparDados() throws NegocioException {

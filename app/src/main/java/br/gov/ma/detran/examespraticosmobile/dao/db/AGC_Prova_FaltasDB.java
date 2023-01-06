@@ -62,10 +62,10 @@ public class AGC_Prova_FaltasDB {
 
     }
 
-    public void atualizarQuantidadeDeFaltas(AGC_Prova_Falta agcProvaFalta, Context context) throws NegocioException {
+    public void atualizarFalta(AGC_Prova_Falta agcProvaFalta, Context context) throws NegocioException {
         agcProvaFaltasOperations = new AGC_Prova_FaltasOperations(context);
         agcProvaFaltasOperations.open();
-        agcProvaFaltasOperations.atualizarQuantidadeDeFaltas(agcProvaFalta);
+        agcProvaFaltasOperations.atualizarFalta(agcProvaFalta);
         agcProvaFaltasOperations.close();
     }
 

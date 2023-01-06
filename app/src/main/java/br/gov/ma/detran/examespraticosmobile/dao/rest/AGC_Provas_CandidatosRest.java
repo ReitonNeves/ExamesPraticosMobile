@@ -44,6 +44,25 @@ public class AGC_Provas_CandidatosRest {
 
     }
 
+    public List<AGC_Prova_Candidato> retornarAgendaDosCandidatosPor(String dataExameInicial, String localExame, String tipoExame) throws JSONException, NegocioException {
+
+        String url = constantesUtil.URL_REST + "/AGCProvaCandidatoRest/retornarAgendas/" +
+                dataExameInicial + "/" +
+                localExame + "/" +
+                tipoExame + "/D";
+
+        String resposta = RedeUtil.getJSONFromAPI(url, "POST");
+
+        if (resposta.equals("")){
+            throw new NegocioException(mensagemRespostaRest);
+        }
+
+        List<AGC_Prova_Candidato> agcProvaCandidatoList = parseJson(resposta);
+        System.out.println(new StringBuilder().append("RespostaAAAAA: ").append(parseJson(resposta)).toString());
+        return agcProvaCandidatoList;
+
+    }
+
     public void alterarSituacaoDoCandidatoParaSincronizadoNoRestService(String listaIdCandidatos) throws NegocioException {
 
         String url = constantesUtil.URL_REST + "/AGCProvaCandidatoRest/alterarSituacaoDoCandidatoParaSincronizado/" +
@@ -84,7 +103,6 @@ public class AGC_Provas_CandidatosRest {
         }
 
     }
-
 
     private List<AGC_Prova_Candidato> parseJson(String json) throws JSONException {
 

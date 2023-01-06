@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.navigation.NavigationView;
+
+import androidx.cardview.widget.CardView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -18,8 +20,11 @@ import android.widget.TextView;
 import br.gov.ma.detran.examespraticosmobile.R;
 import br.gov.ma.detran.examespraticosmobile.modelo.AGC_Prova_Candidato;
 import br.gov.ma.detran.examespraticosmobile.modelo.AGC_Usuario;
+import br.gov.ma.detran.examespraticosmobile.service.AGC_Prova_FaltasService;
 import br.gov.ma.detran.examespraticosmobile.service.AGC_Provas_CandidatosService;
+import br.gov.ma.detran.examespraticosmobile.util.ColorStatusBarUtil;
 import br.gov.ma.detran.examespraticosmobile.util.MensagemErroUtil;
+import br.gov.ma.detran.examespraticosmobile.util.NegocioException;
 import br.gov.ma.detran.examespraticosmobile.util.ParametrosAcessoUtil;
 
 public class HomeActivity extends AppCompatActivity
@@ -35,6 +40,8 @@ public class HomeActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        ColorStatusBarUtil.setColorStatusBar(this);
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -49,41 +56,44 @@ public class HomeActivity extends AppCompatActivity
         btnSincronizarAgenda_setOnClickListener();
         btnAplicarProva_setOnClickListener();
         btnFecharAgenda_setOnClickListener();
+        btnRegistroDePresenca_setOnClickListener();
     }
 
     private void btnSincronizarAgenda_setOnClickListener(){
         //NavigationView navigationView = findViewById(R.id.nav_view);
         //View headerView = navigationView.getHeaderView(0);
-        Button bSincronizarAgenda = findViewById(R.id.btnSincronizarAgenda);
+        CardView card = findViewById(R.id.card_carregar_exames);
 
         final AGC_Usuario agcUsuario = parametrosAcessoUtil.getAgcUsuarioLogado();
         if (agcUsuario != null) {
             if (agcUsuario.getTipoUsuario().equals("E")){
-                bSincronizarAgenda.setEnabled(false);
+                //bSincronizarAgenda.setEnabled(false);
+            } else {
+
             }
         }
 
-        bSincronizarAgenda.setOnClickListener(new View.OnClickListener() {
+        card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                direcionarParaImportar();
+                try {
+                    if(true){//if (agcProvasCandidatosService.verificarSeExistemAgendasPendentesDeEnvioNoTablet(view.getContext()) == false) {
+                        direcionarParaImportar();
+                    } else{
+                        MensagemErroUtil.mostrar("Não é possível sincronizar agendas. Existem registros pendentes de resultados no Tablet. Clique em Fechar Agendas.", view.getContext());
+                    }
+                } catch (Exception e) {
+                    MensagemErroUtil.mostrar(e.getMessage(), view.getContext());
+                }
             }
         });
     }
 
     private void btnAplicarProva_setOnClickListener(){
-
-        Button bAplicarProva = findViewById(R.id.btnAplicarProva);
+        CardView card = findViewById(R.id.card_aplicar_exame);
         final Context context = this;
 
-        final AGC_Usuario agcUsuario = parametrosAcessoUtil.getAgcUsuarioLogado();
-        if (agcUsuario != null) {
-            if (agcUsuario.getTipoUsuario().equals("G")){
-                bAplicarProva.setEnabled(false);
-            }
-        }
-
-        bAplicarProva.setOnClickListener(new View.OnClickListener() {
+        card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
@@ -99,18 +109,70 @@ public class HomeActivity extends AppCompatActivity
                 }
             }
         });
+
+        final AGC_Usuario agcUsuario = parametrosAcessoUtil.getAgcUsuarioLogado();
+        if (agcUsuario != null) {
+            if (agcUsuario.getTipoUsuario().equals("G")){
+                card.setEnabled(false);
+            }
+        }
     }
 
     private void btnFecharAgenda_setOnClickListener(){
+        CardView card = findViewById(R.id.card_enviar_resultados);
 
-        Button bFecharAgenda = findViewById(R.id.btnFecharProva);
-
-        bFecharAgenda.setOnClickListener(new View.OnClickListener() {
+        card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                /*Intent objIndent = new Intent(getApplicationContext(), AplicarExameActivity.class);
+                startActivity(objIndent);
+                finishAffinity();*/
                 direcionarParaFecharAgenda();
             }
         });
+    }
+
+    private void btnRegistroDePresenca_setOnClickListener() {
+        //Button bRegistroDePresenca = findViewById(R.id.btnRegistroDePresenca);
+        //bRegistroDePresenca.setEnabled(false);
+        final Context context = this;
+
+        final AGC_Usuario agcUsuario = parametrosAcessoUtil.getAgcUsuarioLogado();
+        if (agcUsuario != null) {
+            if (agcUsuario.getTipoUsuario().equals("E")){
+                //bRegistroDePresenca.setEnabled(false);
+            }
+        }
+
+        CardView card = findViewById(R.id.card_registrar_presenca_candidatos);
+
+        card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /*Intent objIndent = new Intent(getApplicationContext(), AplicarExameActivity.class);
+                startActivity(objIndent);
+                finishAffinity();
+                direcionarParaFecharAgenda();*/
+            }
+        });
+
+        /*bRegistroDePresenca.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                try {
+                //AGC_Prova_Candidato provaIniciada = agcProvasCandidatosService.retornarProvaIniciada(context);
+                // if (provaIniciada != null){
+                    direcionarParaRegistroDePresenca();
+                    } else {
+                        direcionarParaSelecionarCandidato();
+                    }
+                } catch (Exception ex){
+                    ex.printStackTrace();
+                    MensagemErroUtil.mostrar(ex.getMessage(), context);
+                }
+            }
+        });*/
     }
 
     @Override
@@ -138,7 +200,13 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_limpar_tabelas) {
+            try {
+                new AGC_Provas_CandidatosService().limparTabela(this);
+                new AGC_Prova_FaltasService().limparTabela(this);
+            } catch (NegocioException e) {
+                e.printStackTrace();
+            }
             return true;
         }
 
@@ -176,7 +244,6 @@ public class HomeActivity extends AppCompatActivity
         if (agcUsuario == null) {
             direcionarParaLogin();
         }else {
-
             NavigationView navigationView = findViewById(R.id.nav_view);
             View headerView = navigationView.getHeaderView(0);
             TextView mUsuarioLogado = headerView.findViewById(R.id.txtUsuarioLogado);
@@ -212,6 +279,13 @@ public class HomeActivity extends AppCompatActivity
 
     private void direcionarParaSelecionarCandidato(){
         Intent objIndent = new Intent(getApplicationContext(), SelecionarCandidatoActivity.class);
+        startActivity(objIndent);
+        finishAffinity();
+    }
+
+    private void direcionarParaRegistroDePresenca(){
+        Intent objIndent = new Intent(getApplicationContext(), SelecionarCandidatoActivity.class);
+        objIndent.putExtra("registrarPresenca", true);
         startActivity(objIndent);
         finishAffinity();
     }

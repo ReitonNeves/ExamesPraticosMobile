@@ -6,8 +6,8 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -26,8 +26,11 @@ import br.gov.ma.detran.examespraticosmobile.modelo.AGC_Prova_Candidato;
 import br.gov.ma.detran.examespraticosmobile.modelo.AGC_Prova_Falta;
 import br.gov.ma.detran.examespraticosmobile.modelo.AGC_Usuario;
 import br.gov.ma.detran.examespraticosmobile.modeloEspecializada.ListViewFechar;
+import br.gov.ma.detran.examespraticosmobile.modeloEspecializada.ResultadoExameMap;
 import br.gov.ma.detran.examespraticosmobile.service.AGC_Prova_FaltasService;
 import br.gov.ma.detran.examespraticosmobile.service.AGC_Provas_CandidatosService;
+import br.gov.ma.detran.examespraticosmobile.service.ResultadoService;
+import br.gov.ma.detran.examespraticosmobile.util.ColorStatusBarUtil;
 import br.gov.ma.detran.examespraticosmobile.util.DataHoraUtil;
 import br.gov.ma.detran.examespraticosmobile.util.MensagemErroUtil;
 import br.gov.ma.detran.examespraticosmobile.util.MensagemOkUtil;
@@ -37,10 +40,10 @@ import br.gov.ma.detran.examespraticosmobile.util.ParametrosAcessoUtil;
 public class FecharAgendaActivity extends AppCompatActivity {
 
     private AGC_Provas_CandidatosService agcProvasCandidatosService = new AGC_Provas_CandidatosService();
-    AGC_Prova_FaltasService agcProvaFaltasService = new AGC_Prova_FaltasService();
+    private AGC_Prova_FaltasService agcProvaFaltasService = new AGC_Prova_FaltasService();
 
-    AGC_Prova_FaltaRest agcProvaFaltaRest = new AGC_Prova_FaltaRest();
-    AGC_Provas_CandidatosRest agcProvasCandidatosRest = new AGC_Provas_CandidatosRest();
+    private AGC_Prova_FaltaRest agcProvaFaltaRest = new AGC_Prova_FaltaRest();
+    private AGC_Provas_CandidatosRest agcProvasCandidatosRest = new AGC_Provas_CandidatosRest();
 
     private ListView mLista;
     private List<ListViewFechar> listViewFechar = new ArrayList<>();
@@ -57,6 +60,8 @@ public class FecharAgendaActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //Mostrar o botão
         getSupportActionBar().setHomeButtonEnabled(true);      //Ativar o botão
         getSupportActionBar().setTitle("Fechar Agenda");
+
+        ColorStatusBarUtil.setColorStatusBar(this);
 
         mProgressView = this.findViewById(R.id.progressBarFecharAgenda);
 
@@ -97,7 +102,6 @@ public class FecharAgendaActivity extends AppCompatActivity {
     }
 
     public void fecharAgenda(View v){
-
         LinearLayout parentRow = (LinearLayout) v.getParent();
         ListView listView = (ListView) parentRow.getParent();
         final int position = listView.getPositionForView(parentRow);
@@ -127,11 +131,13 @@ public class FecharAgendaActivity extends AppCompatActivity {
             agcProvaCandidato.setObservacoes(" ");
         }
 
-        agcProvasCandidatosRest.alterarSituacaoDoCandidatoParaFechadoNoRestService(agcProvaCandidato);
+        agcProvasCandidatosRest.alterarSituacaoDoCandidatoParaFechadoNoRestService(agcProvaCandidato); //Comentado para permitir fechar provas.
         //TODO: Validar se restante do processo irá falhar
 
-        agcProvaFaltaRest.remover(agcProvaCandidato.getCpfCandidato(), agcProvaCandidato.getDataExame(), agcProvaCandidato.getLocalExame(), agcProvaCandidato.getTipoExame());
+        ResultadoExameMap rsm = new ResultadoExameMap(agcProvaCandidato);
+        new ResultadoService(this, ResultadoService.ENVIAR_RESULTADO_REQUEST, ResultadoService.METHOD_NAME, rsm).execute();
 
+        //agcProvaFaltaRest.remover(agcProvaCandidato.getCpfCandidato(), agcProvaCandidato.getDataExame(), agcProvaCandidato.getLocalExame(), agcProvaCandidato.getTipoExame());
         List<AGC_Prova_Falta> agcProvaFaltaList = agcProvaFaltasService.retornarFaltasParaCandidatoETipoDeExame(
                 agcProvaCandidato.getCpfCandidato(), agcProvaCandidato.getDataExame(),
                 agcProvaCandidato.getLocalExame(), agcProvaCandidato.getTipoExame(), this);
@@ -141,13 +147,10 @@ public class FecharAgendaActivity extends AppCompatActivity {
                 agcProvaFaltaRest.inserir(a);
             }
         }
-
         agcProvasCandidatosService.alterarSituacaoDoCandidatoParaFechado(agcProvaCandidato, this);
-
     }
 
     private void preencherLista() throws NegocioException {
-
         List<ListViewFechar> agcProvaCandidatoList = agcProvasCandidatosService.retornarTodosAgendadosParaFechar(this);
 
         ArrayList<ListViewFechar> lista = new ArrayList<>();
@@ -159,13 +162,10 @@ public class FecharAgendaActivity extends AppCompatActivity {
             for (ListViewFechar l:agcProvaCandidatoList) {
                 lista.add(l);
             }
-
             this.listViewFechar = agcProvaCandidatoList;
         }
-
         ListViewFecharAdapter adapter = new ListViewFecharAdapter(this, lista);
         mLista.setAdapter(adapter);
-
     }
 
     private void direcionarParaLogin(){
@@ -188,7 +188,6 @@ public class FecharAgendaActivity extends AppCompatActivity {
         if (agcUsuario == null) {
             direcionarParaLogin();
         }
-
     }
 
     @Override
@@ -241,5 +240,9 @@ public class FecharAgendaActivity extends AppCompatActivity {
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             //mFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
+    }
+
+    public void callBackDataFromAsyncTask(String result) {
+        MensagemOkUtil.mostrar(result, this);
     }
 }

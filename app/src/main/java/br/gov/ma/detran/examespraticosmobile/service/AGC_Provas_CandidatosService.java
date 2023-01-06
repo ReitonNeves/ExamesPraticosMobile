@@ -4,7 +4,10 @@ import android.content.Context;
 
 import org.json.JSONException;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 import br.gov.ma.detran.examespraticosmobile.dao.db.AGC_Provas_CandidatosDB;
 import br.gov.ma.detran.examespraticosmobile.dao.rest.AGC_Provas_CandidatosRest;
@@ -12,7 +15,9 @@ import br.gov.ma.detran.examespraticosmobile.modelo.AGC_Falta;
 import br.gov.ma.detran.examespraticosmobile.modelo.AGC_Prova_Candidato;
 import br.gov.ma.detran.examespraticosmobile.modelo.AGC_Prova_Falta;
 import br.gov.ma.detran.examespraticosmobile.modeloEspecializada.ListViewFechar;
+import br.gov.ma.detran.examespraticosmobile.util.DataHoraUtil;
 import br.gov.ma.detran.examespraticosmobile.util.NegocioException;
+import br.gov.ma.detran.examespraticosmobile.views.SelecionarCandidatoActivity;
 
 public class AGC_Provas_CandidatosService {
 
@@ -56,7 +61,6 @@ public class AGC_Provas_CandidatosService {
     }
 
     public void inserirNoDB(AGC_Prova_Candidato agcProvaCandidato, Context context) throws NegocioException {
-
         if (agcProvaCandidato == null){
             throw new NegocioException("Prova do Candidato deve ser informado.");
         }
@@ -64,9 +68,7 @@ public class AGC_Provas_CandidatosService {
         if (context == null){
             throw new NegocioException("Context deve ser informado.");
         }
-
         agcProvasCandidatosDB.inserir(agcProvaCandidato, context);
-
     }
 
     public void limparTabela(Context context) throws NegocioException {
@@ -113,9 +115,9 @@ public class AGC_Provas_CandidatosService {
         }
 
         if (turma.isEmpty()){
-            return agcProvasCandidatosDB.retornarTodosAgendadosParaExaminador(data, tipoExame, examinador, context);
+            return ordenarPorTurmaERegistroDePresenca(agcProvasCandidatosDB.retornarTodosAgendadosParaExaminador(data, tipoExame, examinador, context));
         } else {
-            return agcProvasCandidatosDB.retornarTodosAgendadosParaExaminador(data, tipoExame, turma, examinador, context);
+            return ordenarPorTurmaERegistroDePresenca(agcProvasCandidatosDB.retornarTodosAgendadosParaExaminador(data, tipoExame, turma, examinador, context));
         }
 
     }
@@ -126,8 +128,16 @@ public class AGC_Provas_CandidatosService {
             throw new NegocioException("Context deve ser informado.");
         }
 
-        return agcProvasCandidatosDB.listarTodos(context);
+        return ordenarPorTurmaERegistroDePresenca(agcProvasCandidatosDB.listarTodos(context));
 
+    }
+
+    public List<AGC_Prova_Candidato> listarTodos(String tipoExame, String cpfExaminador, Context context) throws NegocioException {
+        if (context == null){
+            throw new NegocioException("Context deve ser informado.");
+        }
+
+        return ordenarPorTurmaERegistroDePresenca(agcProvasCandidatosDB.listarTodos(tipoExame, cpfExaminador, context));
     }
 
     public AGC_Prova_Candidato retornarPorID(String id, Context context) throws NegocioException {
@@ -145,7 +155,6 @@ public class AGC_Provas_CandidatosService {
     }
 
     public void iniciarProvaCandidato(AGC_Prova_Candidato agcProvaCandidato, Context context) throws NegocioException {
-
         if (agcProvaCandidato == null){
             throw new NegocioException("Candidato deve ser informado ou não está no formato correto.");
         }
@@ -153,30 +162,35 @@ public class AGC_Provas_CandidatosService {
         if (context == null){
             throw new NegocioException("Context deve ser informado.");
         }
-
         agcProvasCandidatosDB.iniciarProvaCandidato(agcProvaCandidato, context);
-
     }
 
     public AGC_Prova_Candidato retornarProvaIniciada(Context context) throws NegocioException {
-
         if (context == null){
             throw new NegocioException("Context deve ser informado.");
         }
-
         return agcProvasCandidatosDB.retornarProvaIniciada(context);
+    }
 
+    public List <AGC_Prova_Candidato> retornarProvasDisponiveis(Context context) throws NegocioException {
+        if (context == null){
+            throw new NegocioException("Context deve ser informado.");
+        }
+        return agcProvasCandidatosDB.retornarProvasDisponiveis(context);
     }
 
     public void alterarSituacaoDoCandidatoParaPendente(AGC_Prova_Candidato agcProvaCandidato, Context context) throws NegocioException {
-
         if (agcProvaCandidato.getSituacao().isEmpty() || agcProvaCandidato.getSituacao().equals("I") == false){
             throw new NegocioException("Situação inválida.");
         }
 
-        if (!agcProvaCandidato.getResultado().equals("3")){
+        if (!agcProvaCandidato.getResultado().equals("3") && !agcProvaCandidato.getResultado().equals("0")){
             if (agcProvaCandidato.getPlaca().isEmpty() || agcProvaCandidato.getPlaca().length() != 8){
-                throw new NegocioException("Placa inválida.");
+                //throw new NegocioException("Placa inválida.");
+            }
+        } else {
+            if (agcProvaCandidato.getObservacoes().isEmpty()){
+                throw new NegocioException("O campo observação deve ser preenchido.");
             }
         }
 
@@ -225,13 +239,21 @@ public class AGC_Provas_CandidatosService {
 
     }
 
+    public void alterarSituacaoDoCandidatoParaDisponivel(AGC_Prova_Candidato agcProvaCandidato, Context context) throws NegocioException {
+        if (agcProvaCandidato.getSituacao().isEmpty() || agcProvaCandidato.getSituacao().equals("D")){
+            throw new NegocioException("Situação inválida.");
+        }
+
+        agcProvaCandidato.setSituacao("D");
+
+        atualizar(agcProvaCandidato, context);
+    }
+
     private void atualizar(AGC_Prova_Candidato agcProvaCandidato, Context context) throws NegocioException {
         if (agcProvaCandidato == null || agcProvaCandidato.getId() == null){
             throw new NegocioException("ID Prova candidato deve ser informado ou está inválido.");
         }
-
         agcProvasCandidatosDB.atualizar(agcProvaCandidato, context);
-
     }
 
     public String retornarResultadoDoCandidato(AGC_Prova_Candidato agcProvaCandidato, Context context) throws NegocioException {
@@ -246,11 +268,9 @@ public class AGC_Provas_CandidatosService {
         }
 
         return resultado;
-
     }
 
-    private Integer retornarQuantidadeDePontosDoCandidato(AGC_Prova_Candidato agcProvaCandidato, Context context) throws NegocioException {
-
+    public final Integer retornarQuantidadeDePontosDoCandidato(AGC_Prova_Candidato agcProvaCandidato, Context context) throws NegocioException {
         AGC_Prova_FaltasService agcProvaFaltasService = new AGC_Prova_FaltasService();
         AGC_FaltaService agcFaltaService = new AGC_FaltaService();
 
@@ -275,16 +295,37 @@ public class AGC_Provas_CandidatosService {
     }
 
     public List<ListViewFechar> retornarTodosAgendadosParaFechar(Context context) throws NegocioException {
-
         if (context == null){
             throw new NegocioException("Context deve ser informado.");
         }
-
         return agcProvasCandidatosDB.retornarTodosAgendadosParaFechar(context);
-
     }
 
     public void inserirDigital(byte[] imagemDigital, String idCandidato, Context context) throws NegocioException {
         agcProvasCandidatosDB.inserirDigital(imagemDigital, idCandidato, context);
+    }
+
+    private List <AGC_Prova_Candidato> ordenarPorTurmaERegistroDePresenca(List <AGC_Prova_Candidato> exames) throws NegocioException {
+        if(Objects.isNull(exames) || exames.isEmpty()){
+            throw  new NegocioException(" Não foram encontrados agendamentos com os dados informados.");
+        }
+        Collections.sort(exames, new Comparator<AGC_Prova_Candidato>() {
+            @Override
+            public int compare(AGC_Prova_Candidato  exame1, AGC_Prova_Candidato  exame2) {
+                int retorno = DataHoraUtil.parseLocalTime(exame1.getTurma()).compareTo(DataHoraUtil.parseLocalTime(exame2.getTurma()));
+                System.out.println(exame1.getHorarioRegistroDePresenca());
+                /*if(exame1.getHorarioRegistroDePresenca() != null && exame2.getHorarioRegistroDePresenca() != null) {
+                    if (retorno == 0) {
+                        retorno = exame1.getHorarioRegistroDePresenca().compareTo(exame2.getHorarioRegistroDePresenca());
+                    }
+                } else if(exame1.getHorarioRegistroDePresenca() == null){
+                    retorno = 1;
+                } else{
+                    retorno = -1;
+                }*/
+                return retorno;
+            }
+        });
+        return exames;
     }
 }

@@ -6,9 +6,11 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.StrictMode;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import org.json.JSONException;
@@ -22,6 +24,7 @@ import br.gov.ma.detran.examespraticosmobile.modelo.AGC_LocalDeProva;
 import br.gov.ma.detran.examespraticosmobile.modelo.AGC_Usuario;
 import br.gov.ma.detran.examespraticosmobile.service.AGC_FaltaService;
 import br.gov.ma.detran.examespraticosmobile.service.AGC_LocalDeProvaService;
+import br.gov.ma.detran.examespraticosmobile.service.AGC_Provas_CandidatosService;
 import br.gov.ma.detran.examespraticosmobile.service.AGC_UsuariosService;
 import br.gov.ma.detran.examespraticosmobile.sincronizacao.AGC_FaltaSinc;
 import br.gov.ma.detran.examespraticosmobile.sincronizacao.AGC_LocalDeProvaSinc;
@@ -43,6 +46,10 @@ public class MainActivity extends AppCompatActivity {
         {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
+            Window window = this.getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(this.getResources().getColor(R.color.colorBlue));
         }
 
         mProgressView = this.findViewById(R.id.progressBarImportar);
@@ -63,10 +70,8 @@ public class MainActivity extends AppCompatActivity {
     private void iniciarAplicacao(){
 
         try {
-
-           //AGC_Provas_CandidatosService agcProvasCandidatosService = new AGC_Provas_CandidatosService();
-           // agcProvasCandidatosService.limparTabela(this) ;
-
+            AGC_Provas_CandidatosService agcProvasCandidatosService = new AGC_Provas_CandidatosService();
+            //agcProvasCandidatosService.limparTabela(this) ;
             //List<AGC_Prova_Candidato> agcProvaCandidatoList = agcProvasCandidatosService.listarTodos(this);
 
             if (verificarSeTabelaDeUsuariosEstaVazia() == true) {
@@ -80,19 +85,16 @@ public class MainActivity extends AppCompatActivity {
             if (verificarSeTabelaDeFaltasEstaVazia() == true){
                 importarDadosDasFaltas();
             }
-
             direcionarParaLogin();
 
         } catch (Exception e) {
             e.printStackTrace();
-            MensagemErroUtil.mostrar("Erro ao atualizar base de dados do Tablet. " +
+            MensagemErroUtil.mostrar("Erro ao atualizar a base de dados do Tablet. " +
                     "Reinicie a aplicação ou tente novamente clicando no botão Atualizar.", this);
         }
-
     }
 
     private Boolean verificarSeTabelaDeUsuariosEstaVazia() throws NegocioException {
-
         AGC_UsuariosService agcUsuariosService = new AGC_UsuariosService();
         List<AGC_Usuario> agcUsuarios = agcUsuariosService.retornarTodos(this);
 
@@ -101,11 +103,9 @@ public class MainActivity extends AppCompatActivity {
         } else {
             return false;
         }
-
     }
 
     private Boolean verificarSeTabelaDeLocaisEstaVazia() throws NegocioException {
-
         AGC_LocalDeProvaService agcLocalDeProvaService = new AGC_LocalDeProvaService();
         List<AGC_LocalDeProva> agcLocalDeProvaList = agcLocalDeProvaService.retornarTodosOrdenadoPorId(this);
 
@@ -114,11 +114,9 @@ public class MainActivity extends AppCompatActivity {
         } else {
             return false;
         }
-
     }
 
     private Boolean verificarSeTabelaDeFaltasEstaVazia() throws NegocioException {
-
         AGC_FaltaService agcFaltaService = new AGC_FaltaService();
         List<AGC_Falta> agcFaltaList = agcFaltaService.listarTodos(this);
 
@@ -127,28 +125,21 @@ public class MainActivity extends AppCompatActivity {
         } else {
             return false;
         }
-
     }
 
     private void importarDadosDosUsuarios() throws JSONException, NegocioException, IOException {
-
         AGC_UsuariosSinc agcUsuariosSinc = new AGC_UsuariosSinc();
         agcUsuariosSinc.sincronizarTabelaDeUsuarios(this);
-
     }
 
     private void importarDadosDosLocaisDeProva() throws JSONException, NegocioException, IOException {
-
         AGC_LocalDeProvaSinc agcLocalDeProvaSinc = new AGC_LocalDeProvaSinc();
         agcLocalDeProvaSinc.sincronizarTabelaDeLocaisDeProva(this);
-
     }
 
     private void importarDadosDasFaltas() throws JSONException, NegocioException, IOException {
-
         AGC_FaltaSinc agcFaltaSinc = new AGC_FaltaSinc();
         agcFaltaSinc.sincronizarTabelaDeFaltas(this);
-
     }
 
     private void direcionarParaLogin(){

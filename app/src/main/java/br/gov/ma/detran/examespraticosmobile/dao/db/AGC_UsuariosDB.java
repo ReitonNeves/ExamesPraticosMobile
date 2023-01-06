@@ -28,6 +28,14 @@ public class AGC_UsuariosDB {
         return agcUsuario;
     }
 
+    public AGC_Usuario retornarPorCpf(String cpf, Context context) {
+        agcUsuariosOperations = new AGC_UsuariosOperations(context);
+        agcUsuariosOperations.open();
+        AGC_Usuario agcUsuario = agcUsuariosOperations.retornarPorCpf(cpf);
+        agcUsuariosOperations.close();
+        return agcUsuario;
+    }
+
     public AGC_Usuario retornarPorLoginSenha(String login, String senha, Context context){
         agcUsuariosOperations = new AGC_UsuariosOperations(context);
         agcUsuariosOperations.open();

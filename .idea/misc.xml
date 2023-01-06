@@ -3,6 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Reiton/Desktop/ExamesPraticosMobile/app/src/main/res/layout/activity_aplicar_prova.xml" value="0.17916666666666667" />
+        <entry key="..\:/Users/Reiton/Desktop/ExamesPraticosMobile/app/src/main/res/layout/activity_login.xml" value="0.17916666666666667" />
+        <entry key="..\:/Users/Reiton/Desktop/ExamesPraticosMobile/app/src/main/res/layout/content_aplicar_prova.xml" value="0.17916666666666667" />
+        <entry key="..\:/Users/Reiton/Desktop/ExamesPraticosMobile/app/src/main/res/layout/dialog_aluno_ausente.xml" value="0.17916666666666667" />
+        <entry key="..\:/Users/Reiton/Desktop/ExamesPraticosMobile/app/src/main/res/layout/dialog_confirmar_resultado.xml" value="0.17916666666666667" />
+        <entry key="..\:/Users/Reiton/Desktop/ExamesPraticosMobile/app/src/main/res/layout/dialog_exame_cancelado.xml" value="0.17916666666666667" />
+        <entry key="..\:/Users/Reiton/Desktop/ExamesPraticosMobile/app/src/main/res/layout/simplerow.xml" value="0.17916666666666667" />
+        <entry key="..\:/Users/Reiton/Desktop/ExamesPraticosMobile/app/src/main/res/layout/simplerow_faltas.xml" value="0.67" />
+        <entry key="..\:/Users/Reiton/Desktop/ExamesPraticosMobile/app/src/main/res/menu/actions_exame.xml" value="0.17916666666666667" />
+        <entry key="..\:/Users/Reiton/Desktop/ExamesPraticosMobile/app/src/main/res/menu/activity_home_drawer.xml" value="0.17916666666666667" />
+        <entry key="..\:/Users/Reiton/Desktop/ExamesPraticosMobile/app/src/main/res/menu/home.xml" value="0.17916666666666667" />
         <entry key="..\:/Users/dmdiniz/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/activity_aplicar_prova.xml" value="0.22" />
         <entry key="..\:/Users/dmdiniz/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/activity_home.xml" value="0.1" />
         <entry key="..\:/Users/dmdiniz/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/activity_login.xml" value="0.25" />
@@ -13,6 +24,90 @@
         <entry key="..\:/Users/dmdiniz/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/content_selecionar_candidato_list.xml" value="0.1" />
         <entry key="..\:/Users/dmdiniz/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/menu/home.xml" value="0.22" />
         <entry key="..\:/Users/dmdiniz/eclipse-workspace/ExamesPraticosMobile/ftrScanApiAndroidHelperUsbHost/src/main/res/layout/main.xml" value="0.25" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/drawable-v24/add_notes.xml" value="0.2085" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/drawable-v24/assignment-48px.xml" value="0.2085" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/drawable-v24/backgroud_azul_degrade.xml" value="0.2085" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/drawable-v24/calendar.xml" value="0.2085" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/drawable-v24/candidatos.xml" value="0.1835" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/drawable-v24/detalhes_exame.xml" value="0.2115" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/drawable-v24/directions_car.xml" value="0.2085" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/drawable-v24/enviar_resultado.xml" value="0.2115" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/drawable-v24/exames.xml" value="0.1835" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/drawable-v24/ic_add_falta.xml" value="0.2085" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/drawable-v24/ic_carregar_exames.xml" value="0.2085" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/drawable-v24/ic_carregar_exames_2.xml" value="0.2085" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/drawable-v24/ic_enviar_resultados.xml" value="0.2085" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/drawable-v24/ic_exame.xml" value="0.2085" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/drawable-v24/ic_registro_presenca.xml" value="0.2085" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/drawable-v24/info_exame.xml" value="0.2115" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/drawable-v24/pause_circle.xml" value="0.2085" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/drawable-v24/play_arrow.xml" value="0.2085" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/drawable-v24/play_circle.xml" value="0.2085" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/drawable-v24/play_pause.xml" value="0.2085" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/drawable-v24/remove_falta.xml" value="0.2085" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/drawable-v24/replay-40px.xml" value="0.2085" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/drawable-v24/replay.xml" value="0.2085" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/drawable-v24/restart_alt.xml" value="0.2085" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/drawable-v24/resultados.xml" value="0.1835" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/drawable-v24/stop.xml" value="0.2085" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/drawable-v24/stop_circle.xml" value="0.2085" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/drawable-v24/system_update.xml" value="0.2085" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/layout/activity_aplicar_exame.xml" value="0.25" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/layout/activity_aplicar_prova.xml" value="0.33" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/layout/activity_carregar_agendamento.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/layout/activity_fechar_agenda.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/layout/activity_home.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/layout/activity_importar.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/layout/activity_login.xml" value="0.153125" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/layout/activity_main.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/layout/activity_selecionar_candidato.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/layout/app_bar_home.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/layout/content_aplicar_prova.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/layout/content_fechar_agenda_list.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/layout/content_home.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/layout/content_importar.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/layout/content_selecionar_candidato.xml" value="0.33" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/layout/content_selecionar_candidato_list.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/layout/dialog_add_observacoes.xml" value="0.1" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/layout/dialog_confirmar_resultado.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/layout/dialog_exame_cancelado.xml" value="0.1" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/layout/dialog_pre_exame.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/layout/dialog_registro_presenca.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/layout/fragment_aplicar_exame.xml" value="0.19010416666666666" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/layout/simplerow_faltas.xml" value="0.25" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/layout/simplerow_fechar.xml" value="0.25" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/menu/actions_exame.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/rnmoraes/Desktop/ExamesPraticosMobile/app/src/main/res/menu/home.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/activity_aplicar_prova.xml" value="0.25" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/activity_fechar_agenda.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/activity_ftr_scan_usb_host.xml" value="0.1852355072463768" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/activity_home.xml" value="0.1308876811594203" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/activity_importar.xml" value="0.17" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/activity_login.xml" value="0.25" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/activity_selecionar_candidato.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/app_bar_home.xml" value="0.18840579710144928" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/content_aplicar_prova.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/content_ftr_scan_usb_host.xml" value="0.1852355072463768" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/content_home.xml" value="0.2" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/content_importar.xml" value="0.25" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/content_registrar_presenca_candidato.xml" value="0.1308876811594203" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/content_selecionar_candidato.xml" value="0.5" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/croqui.xml" value="0.1852355072463768" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/dialog_add_observacoes.xml" value="0.22" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/dialog_aluno_ausente.xml" value="0.11096014492753623" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/dialog_confirmar_resultado.xml" value="0.21" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/dialog_falta_ctb.xml" value="0.25" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/dialog_pre_exame.xml" value="0.33" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/dialog_registro_presenca.xml" value="0.25" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/fragment_first.xml" value="0.12" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/fragment_second.xml" value="0.22" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/layout_mensagem_erro.xml" value="0.1" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/nav_header_home.xml" value="0.1" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/simplerow.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/simplerow_faltas.xml" value="0.25" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/layout/simplerow_fechar.xml" value="0.18840579710144928" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/menu/activity_home_drawer.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/rnmoraes/eclipse-workspace/ExamesPraticosMobile/app/src/main/res/menu/home.xml" value="0.20416666666666666" />
       </map>
     </option>
   </component>

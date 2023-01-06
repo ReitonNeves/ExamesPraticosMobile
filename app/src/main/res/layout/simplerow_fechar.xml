@@ -1,37 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content"
+    android:gravity="center">
 
     <TextView
         android:id="@+id/txtNomeCandidato"
-        android:layout_width="350dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="5dp"
+        android:layout_width="305dp"
+        android:layout_height="match_parent"
         android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
         android:layout_weight="1"
+        android:gravity="left|center_vertical"
+        android:paddingRight="2dp"
         android:textSize="18sp" />
 
     <TextView
         android:id="@+id/txtResultado"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginEnd="5dp"
+        android:layout_width="45dp"
+        android:layout_height="match_parent"
         android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
         android:layout_weight="1"
-        android:textAlignment="center"
+        android:gravity="left|center_vertical"
+        android:textAlignment="textStart"
         android:textColor="@android:color/black"
         android:textSize="18sp"
         android:textStyle="bold" />
 
     <ImageButton
-        android:id="@+id/btnFecharAgenda"
-        android:layout_width="20dp"
-        android:layout_height="50dp"
+        android:id="@+id/imageButton3"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
+        android:background="@android:color/transparent"
+        app:srcCompat="@drawable/detalhes_exame" />
+
+    <ImageButton
+        android:id="@+id/btnFecharAgenda"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@android:color/transparent"
         android:contentDescription="@string/contentDescriptionRemoveFalta"
         android:onClick="fecharAgenda"
-        app:srcCompat="@android:drawable/checkbox_on_background" />
+        app:srcCompat="@drawable/enviar_resultado" />
 
 </LinearLayout>

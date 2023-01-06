@@ -38,6 +38,18 @@ public class AGC_UsuariosService {
         return agcUsuariosDB.retornarPorID(id, context);
     }
 
+    public AGC_Usuario retornarPorCpf(String cpf, Context context) throws NegocioException {
+        if (cpf.isEmpty()){
+            throw new NegocioException("O CPF deve ser informado.");
+        }
+
+        if (context == null){
+            throw new NegocioException("Context deve ser informado.");
+        }
+
+        return agcUsuariosDB.retornarPorCpf(cpf, context);
+    }
+
     public AGC_Usuario retornarPorLoginSenha(String login, String senha, Context context) throws NegocioException {
         if (login == null || login.isEmpty()){
             throw new NegocioException("Login deve ser informado.");

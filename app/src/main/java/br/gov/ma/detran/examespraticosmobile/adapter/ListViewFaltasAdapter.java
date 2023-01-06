@@ -9,17 +9,18 @@ import android.widget.BaseAdapter;
 import java.util.List;
 
 import br.gov.ma.detran.examespraticosmobile.R;
-import br.gov.ma.detran.examespraticosmobile.holder.ListViewFaltasHolder;
+import br.gov.ma.detran.examespraticosmobile.adapter.holder.ListViewFaltasHolder;
 import br.gov.ma.detran.examespraticosmobile.modeloEspecializada.ListViewFaltas;
 
 public class ListViewFaltasAdapter extends BaseAdapter{
-
     Context c;
     List<ListViewFaltas> lista;
+
     public ListViewFaltasAdapter(Context context, List<ListViewFaltas> lista){
         this.c = context;
         this.lista = lista;
     }
+
     @Override
     public int getCount() {
         return lista.size();
@@ -39,6 +40,7 @@ public class ListViewFaltasAdapter extends BaseAdapter{
     public View getView(int position, View view, ViewGroup viewGroup) {
         View row = view;
         ListViewFaltasHolder holder = null;
+
         if(row == null){
             LayoutInflater inflater = (LayoutInflater) c
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);

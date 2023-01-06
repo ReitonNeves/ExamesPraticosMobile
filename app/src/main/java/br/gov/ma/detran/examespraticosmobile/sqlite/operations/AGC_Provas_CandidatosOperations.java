@@ -91,7 +91,7 @@ public class AGC_Provas_CandidatosOperations {
 
         String sql = "select * from " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.TABLE_NAME
                 + " where " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_SITUACAO
-                + " <> 'F'";
+                + " = 'P'";
 
         //Cursor cursor = database.rawQuery(sql, null);
 
@@ -116,7 +116,9 @@ public class AGC_Provas_CandidatosOperations {
                 + " and " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_TIPO_EXAME + " = ? "
                 + " and (" + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CPF_EXAMINADOR_1 + " = ? or " +
                 AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CPF_EXAMINADOR_2 + " = ?) "
-                + " order by " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_NOME;
+                + " order by " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_TURMA +", "
+                + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_HORARIO_REGISTRO_PRESENCA+", "
+                + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_NOME;
 
         return retornarLista_AGCProvaCandidato(sql, new String[] {data, tipoExame, examinador, examinador});
 
@@ -131,9 +133,21 @@ public class AGC_Provas_CandidatosOperations {
                 + " and " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_TURMA + " = ? "
                 + " and (" + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CPF_EXAMINADOR_1 + " = ? or " +
                 AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CPF_EXAMINADOR_2 + " = ?) "
-                + " order by " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_NOME;
+                + " order by " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_TURMA +", "
+                + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_HORARIO_REGISTRO_PRESENCA+", "
+                + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_NOME;
 
         return retornarLista_AGCProvaCandidato(sql, new String[] {data, tipoExame, turma, examinador, examinador});
+
+    }
+
+    public List<AGC_Prova_Candidato> retornarProvasDisponiveis(){
+
+        String sql = "select * from "+ AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.TABLE_NAME
+                + " where " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_SITUACAO + " = 'D' "
+                + " order by " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_NOME;
+
+        return retornarLista_AGCProvaCandidato(sql, null);
 
     }
 
@@ -165,13 +179,12 @@ public class AGC_Provas_CandidatosOperations {
                 } else if (resultado.equals("3")){
                     listViewFechar.setResultado("Ausente");
                 } else {
-                    listViewFechar.setResultado("");
+                    listViewFechar.setResultado("Cancelado");
                 }
 
                 lista.add(listViewFechar);
             }
         }
-
         cursor.close();
 
         return lista;
@@ -185,6 +198,15 @@ public class AGC_Provas_CandidatosOperations {
 
         return retornarLista_AGCProvaCandidato(sql, null);
 
+    }
+
+    public List<AGC_Prova_Candidato> listarTodos(String tipoExame, String cpfExaminador) {
+        String sql = "select * from "+ AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.TABLE_NAME
+                + " where " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_TIPO_EXAME + " = ? "
+                + " and " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CPF_EXAMINADOR_1 + " = ?"
+                + " order by " + AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_NOME;
+
+        return retornarLista_AGCProvaCandidato(sql, new String[] {tipoExame, cpfExaminador});
     }
 
     public AGC_Prova_Candidato retornarPorID(String id){
@@ -218,8 +240,7 @@ public class AGC_Provas_CandidatosOperations {
 
     }
 
-    private List<AGC_Prova_Candidato>
-    retornarLista_AGCProvaCandidato(String sql, String[] argumentos){
+    private List<AGC_Prova_Candidato> retornarLista_AGCProvaCandidato(String sql, String[] argumentos){
 
         Cursor cursor = database.rawQuery(sql, argumentos);
 
@@ -243,9 +264,7 @@ public class AGC_Provas_CandidatosOperations {
                 lista.add(agcProvaCandidato);
             }
         }
-
         return lista;
-
     }
 
     private AGC_Prova_Candidato manipularCursor(Cursor cursor){
@@ -281,6 +300,7 @@ public class AGC_Provas_CandidatosOperations {
         agcProvaCandidato.setDataHoraInclusaoAgenda(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_DATA_HORA_INCLUSAO_AGENDA)));
         agcProvaCandidato.setHoraFimExame(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_HORA_FIM_EXAME)));
         agcProvaCandidato.setHoraInicioExame(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_HORA_INICIO_EXAME)));
+        agcProvaCandidato.setHorarioRegistroPresenca(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_HORARIO_REGISTRO_PRESENCA)));
         agcProvaCandidato.setLocalExame(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_LOCAL_EXAME)));
         agcProvaCandidato.setNome(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_NOME)));
         agcProvaCandidato.setNomeCfc(cursor.getString(cursor.getColumnIndex(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_NOME_CFC)));
@@ -318,6 +338,7 @@ public class AGC_Provas_CandidatosOperations {
         contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CPF_EXAMINADOR_2, agcProvaCandidato.getCpfExaminador2());
         contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_OBSERVACOES, agcProvaCandidato.getObservacoes());
         contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_PLACA, agcProvaCandidato.getPlaca());
+        contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_HORARIO_REGISTRO_PRESENCA, agcProvaCandidato.getHorarioRegistroDePresenca());
         contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_HORA_INICIO_EXAME, agcProvaCandidato.getHoraInicioExame());
         contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_HORA_FIM_EXAME, agcProvaCandidato.getHoraFimExame());
         contentValues.put(AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CPF_ENVIO_EXAME, agcProvaCandidato.getCpfEnvioExame());

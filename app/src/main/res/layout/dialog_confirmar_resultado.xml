@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingHorizontal="8dp">
 
     <TextView
         android:id="@+id/txtResultado"
@@ -17,20 +19,64 @@
         android:id="@+id/txtMensagemConfirmar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
         android:layout_marginTop="20dp"
+        android:layout_marginBottom="30dp"
         android:layout_weight="1"
         android:textAlignment="center"
         android:textSize="18sp" />
 
-    <EditText
-        android:id="@+id/txtPlacaVeiculo"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:ems="10"
-        android:hint="@string/textoHintPlacaVeiculo"
-        android:inputType="textPersonName" />
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/txtCpfExaminador1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="CPF Examinador 1"
+            android:inputType="number"
+            android:maxLength="14"
+            android:padding="20dp" />
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="125dp"
+            android:layout_height="62dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/baseline_fingerprint_24" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="15dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/txtCpfExaminador2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="CPF Examinador 2"
+            android:inputType="number"
+            android:maxLength="14"
+            android:padding="20dp" />
+
+        <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="125dp"
+            android:layout_height="62dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/baseline_fingerprint_24" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textView11"
@@ -48,6 +94,7 @@
         android:layout_height="150dp"
         android:layout_weight="1"
         android:ems="10"
+        android:gravity="start|top"
         android:inputType="textMultiLine" />
 
     <LinearLayout
@@ -56,7 +103,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:layout_weight="1"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingVertical="10dp">
 
         <Button
             android:id="@+id/btnCancelar"

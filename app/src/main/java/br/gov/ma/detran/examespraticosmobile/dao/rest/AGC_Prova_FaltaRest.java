@@ -25,8 +25,9 @@ public class AGC_Prova_FaltaRest {
                 agcProvaFalta.getItemLetra() + "/" +
                 agcProvaFalta.getQuantidadeDeFaltas() + "/" +
                 agcProvaFalta.getCpfInclusao() + "/" +
-                agcProvaFalta.getDataHoraInclusao().replace(" ", "+") //URLEncoder.encode(agcProvaFalta.getDataHoraInclusao(), "UTF-8")
-                ;
+                agcProvaFalta.getDataHoraInclusao().replace(" ", "+") + "/" +
+                agcProvaFalta.getObservacoes(); //URLEncoder.encode(agcProvaFalta.getDataHoraInclusao(), "UTF-8")
+
 
         String resposta = RedeUtil.getJSONFromAPI(url, "POST");
 

@@ -9,11 +9,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/header_confirm_dialog_aluno_ausente"
+        android:text="Candidato Ausente"
         android:textAlignment="center"
         android:textColor="@android:color/holo_orange_dark"
         android:textSize="50sp"
         android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Observação:"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/txtObservacaoAusente"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_weight="1"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textMultiLine" />
 
     <TextView
         android:id="@+id/txtMensagemConfirmar"

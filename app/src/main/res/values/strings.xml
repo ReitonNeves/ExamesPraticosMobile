@@ -29,7 +29,7 @@
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_limpar_tabelas">Limpar Tabelas</string>
     <string name="btnImportar_text">Importar Agendas</string>
     <string name="title_activity_importar">Importar Agenda de Exames</string>
     <string name="botaoImportar">Importar Agendas</string>
@@ -60,7 +60,7 @@
     <string name="clique_em_um_dos_candidatos_na_lista_abaixo">Clique em um dos Candidatos na lista abaixo</string>
     <string name="Tipo_de_Exame">Tipo de Exame:</string>
     <string name="candidato">Candidato:</string>
-    <string name="cpf">CPF</string>
+    <string name="cpf">CPF:</string>
     <string name="textoBotaoAlunoAusente">Aluno Ausente</string>
     <string name="textoBotaoFecharProva">Fechar Prova</string>
     <string name="header_confirm_dialog_aluno_ausente">Rersultado: Ausente</string>
@@ -75,5 +75,20 @@
     <string name="botaoFecharTodos">Fechar Todas as Agendas</string>
     <string name="title_activity_scan2">ScanActivity2</string>
     <string name="title_activity_ftr_scan_usb_host">Coletar Digital</string>
+    <string name="title_activity_registrar_presenca_candidato">RegistrarPresencaCandidatoActivity
+    </string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="title_activity_aplicar_exame">AplicarExameActivity</string>
+    <string name="tab_text_1">Leve</string>
+    <string name="tab_text_2">Média</string>
+    <string name="tab_text_3">Grave</string>
+    <string name="tab_text_4">Eliminatória</string>
 
 </resources>

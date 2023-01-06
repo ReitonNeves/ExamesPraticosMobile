@@ -59,6 +59,14 @@ public class AGC_Provas_CandidatosDB {
         return retorno;
     }
 
+    public List<AGC_Prova_Candidato> listarTodos(String tipoExame, String cpfExaminador, Context context) {
+        agcProvasCandidatosOperations = new AGC_Provas_CandidatosOperations(context);
+        agcProvasCandidatosOperations.open();
+        List<AGC_Prova_Candidato> retorno = agcProvasCandidatosOperations.listarTodos(tipoExame, cpfExaminador);
+        agcProvasCandidatosOperations.close();
+        return retorno;
+    }
+
     public AGC_Prova_Candidato retornarPorID(String id, Context context){
         agcProvasCandidatosOperations = new AGC_Provas_CandidatosOperations(context);
         agcProvasCandidatosOperations.open();
@@ -103,4 +111,13 @@ public class AGC_Provas_CandidatosDB {
         agcProvasCandidatosOperations.atualizarDigital(imagemDigital, idCandidato);
         agcProvasCandidatosOperations.close();
     }
+
+    public List<AGC_Prova_Candidato> retornarProvasDisponiveis(Context context){
+        agcProvasCandidatosOperations = new AGC_Provas_CandidatosOperations(context);
+        agcProvasCandidatosOperations.open();
+        List<AGC_Prova_Candidato> retorno = agcProvasCandidatosOperations.retornarProvasDisponiveis();
+        agcProvasCandidatosOperations.close();
+        return retorno;
+    }
+
 }

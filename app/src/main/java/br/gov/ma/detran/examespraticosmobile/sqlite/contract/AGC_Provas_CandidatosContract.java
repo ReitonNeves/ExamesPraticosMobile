@@ -27,6 +27,7 @@ public class AGC_Provas_CandidatosContract {
                     AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CPF_EXAMINADOR_2 + " TEXT," +
                     AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_OBSERVACOES + " TEXT," +
                     AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_PLACA + " TEXT," +
+                    AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_HORARIO_REGISTRO_PRESENCA + " TEXT," +
                     AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_HORA_INICIO_EXAME + " TEXT," +
                     AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_HORA_FIM_EXAME + " TEXT," +
                     AGC_Provas_CandidatosContract.AGC_Provas_CandidatosEntry.COLUMN_CPF_ENVIO_EXAME + " TEXT," +
@@ -61,6 +62,7 @@ public class AGC_Provas_CandidatosContract {
         public static final String COLUMN_CPF_EXAMINADOR_2 = "cpfExaminador2";
         public static final String COLUMN_OBSERVACOES = "observacoes";
         public static final String COLUMN_PLACA = "placa";
+        public static final String COLUMN_HORARIO_REGISTRO_PRESENCA = "HorarioRegistroPresenca";
         public static final String COLUMN_HORA_INICIO_EXAME = "horaInicioExame";
         public static final String COLUMN_HORA_FIM_EXAME = "horaFimExame";
         public static final String COLUMN_CPF_ENVIO_EXAME = "cpfEnvioExame";
@@ -70,6 +72,6 @@ public class AGC_Provas_CandidatosContract {
         public static final String COLUMN_CPF_INCLUSAO = "cpfInclusao";
         public static final String COLUMN_DATA_HORA_INCLUSAO_AGENDA = "dataHoraInclusaoAgenda";
         public static final String COLUMN_IMAGEM_DIGITAL = "imagemDigital";
-        
+
     }
 }

@@ -77,6 +77,22 @@ public class AGC_UsuariosOperations {
 
     }
 
+    public AGC_Usuario retornarPorCpf(String cpf) {
+        String sql = "select * from " + AGC_UsuariosContract.AGC_UsuariosEntry.TABLE_NAME
+                + " where " + AGC_UsuariosContract.AGC_UsuariosEntry.COLUMN_CPFUSUARIO + " = ?";
+
+        Cursor cursor = database.rawQuery(sql, new String[]{cpf});
+
+        AGC_Usuario agcUsuario = null;
+
+        if (cursor.moveToFirst()) {
+            agcUsuario = new AGC_Usuario(cursor.getLong(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5));
+        }
+        cursor.close();
+
+        return agcUsuario;
+    }
+
     public AGC_Usuario retornarPorLoginSenha(String login, String senha){
 
         String sql = "select * from " + AGC_UsuariosContract.AGC_UsuariosEntry.TABLE_NAME
@@ -132,5 +148,4 @@ public class AGC_UsuariosOperations {
             throw new NegocioException("Erro ao deletar registros");
 
     }
-
 }

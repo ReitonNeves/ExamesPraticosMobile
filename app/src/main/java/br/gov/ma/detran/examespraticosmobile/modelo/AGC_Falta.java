@@ -10,7 +10,7 @@ public class AGC_Falta{
 
     public AGC_Falta(){}
 
-    public AGC_Falta(String tipoFalta, String itemLetra, String descricao, Integer pontos, String tipoExame) {
+    public AGC_Falta(String tipoFalta, String itemLetra, String descricao, Integer pontos, String tipoExame, boolean foraDeResolucao) {
         this.tipoFalta = tipoFalta;
         this.itemLetra = itemLetra;
         this.descricao = descricao;
@@ -57,4 +57,5 @@ public class AGC_Falta{
     public void setTipoExame(String tipoExame) {
         this.tipoExame = tipoExame;
     }
+
 }

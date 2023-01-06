@@ -152,7 +152,7 @@ public class AGC_Prova_FaltasService {
 
     }
 
-    public void atualizarQuantidadeDeFaltas(AGC_Prova_Falta agcProvaFalta, Context context) throws NegocioException {
+    public void atualizarFalta(AGC_Prova_Falta agcProvaFalta, Context context) throws NegocioException {
 
         String quantidadesDeFaltas = String.valueOf(agcProvaFalta.getQuantidadeDeFaltas());
         String cpfInclusao = agcProvaFalta.getCpfInclusao();
@@ -207,7 +207,7 @@ public class AGC_Prova_FaltasService {
             throw new NegocioException("Context deve ser informado.");
         }
 
-        agcProvaFaltasDB.atualizarQuantidadeDeFaltas(agcProvaFalta, context);
+        agcProvaFaltasDB.atualizarFalta(agcProvaFalta, context);
 
     }
 
@@ -251,7 +251,6 @@ public class AGC_Prova_FaltasService {
     public void enviarFaltasParaRest(List<AGC_Prova_Falta> agcProvaFaltaList) throws NegocioException {
 
         AGC_Prova_FaltaRest agcProvaFaltaRest = new AGC_Prova_FaltaRest();
-
         try {
             if(agcProvaFaltaList != null){
                 for (AGC_Prova_Falta a:agcProvaFaltaList) {
@@ -271,13 +270,7 @@ public class AGC_Prova_FaltasService {
                     }
                 }
             }
-
             throw new NegocioException(e.getMessage());
-
         }
-
     }
-
-
-
 }

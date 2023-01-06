@@ -9,11 +9,10 @@ import android.widget.BaseAdapter;
 import java.util.List;
 
 import br.gov.ma.detran.examespraticosmobile.R;
-import br.gov.ma.detran.examespraticosmobile.holder.ListViewFecharHolder;
+import br.gov.ma.detran.examespraticosmobile.adapter.holder.ListViewFecharHolder;
 import br.gov.ma.detran.examespraticosmobile.modeloEspecializada.ListViewFechar;
 
 public class ListViewFecharAdapter  extends BaseAdapter {
-
     Context c;
     List<ListViewFechar> lista;
 

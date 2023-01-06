@@ -26,4 +26,5 @@ public class ListViewFaltas {
     public void setQuantidade(String quantidade) {
         this.quantidade = quantidade;
     }
+
 }

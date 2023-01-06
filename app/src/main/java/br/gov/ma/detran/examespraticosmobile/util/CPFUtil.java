@@ -14,4 +14,14 @@ public class CPFUtil {
 
     }
 
+    public static String formatarSemCaracteres(String cpf) throws NegocioException {
+        if(cpf.isEmpty()){
+            throw new NegocioException(" Informe o CPF.");
+        }
+        return cpf.replace(".", "").replace("-", "");
+    }
+
+
+
+
 }

@@ -23,6 +23,7 @@ public class AGC_Prova_Candidato implements Serializable {
     private String cpfExaminador2;
     private String observacoes;
     private String placa;
+    private String horarioRegistroPresenca;
     private String horaInicioExame;
     private String horaFimExame;
     private String cpfEnvioExame;
@@ -96,7 +97,6 @@ public class AGC_Prova_Candidato implements Serializable {
         this.cpfInclusao = cpfInclusao;
         this.dataHoraInclusaoAgenda = dataHoraInclusaoAgenda;
     }
-
 
     public Long getId() {
         return id;
@@ -240,6 +240,14 @@ public class AGC_Prova_Candidato implements Serializable {
 
     public void setPlaca(String placa) {
         this.placa = placa;
+    }
+
+    public String getHorarioRegistroDePresenca() {
+        return horarioRegistroPresenca;
+    }
+
+    public void setHorarioRegistroPresenca(String horarioRegistroPresenca) {
+        this.horarioRegistroPresenca = horarioRegistroPresenca;
     }
 
     public String getHoraInicioExame() {

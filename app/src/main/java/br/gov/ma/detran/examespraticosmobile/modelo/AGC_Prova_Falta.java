@@ -2,6 +2,7 @@ package br.gov.ma.detran.examespraticosmobile.modelo;
 
 public class AGC_Prova_Falta {
 
+    private Long id;
     private String cpfCandidato;
     private String dataExame;
     private String localExame;
@@ -11,6 +12,15 @@ public class AGC_Prova_Falta {
     private Integer quantidadeDeFaltas;
     private String cpfInclusao;
     private String dataHoraInclusao;
+    private String observacoes;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getCpfCandidato() {
         return cpfCandidato;
@@ -82,5 +92,13 @@ public class AGC_Prova_Falta {
 
     public void setDataHoraInclusao(String dataHoraInclusao) {
         this.dataHoraInclusao = dataHoraInclusao;
+    }
+
+    public String getObservacoes() {
+        return observacoes;
+    }
+
+    public void setObservacoes(String observacoes) {
+        this.observacoes = observacoes;
     }
 }

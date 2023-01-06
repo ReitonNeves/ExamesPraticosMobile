@@ -1,5 +1,6 @@
 package br.gov.ma.detran.examespraticosmobile.sqlite.operations;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -14,6 +15,7 @@ import br.gov.ma.detran.examespraticosmobile.modelo.AGC_Prova_Falta;
 import br.gov.ma.detran.examespraticosmobile.modeloEspecializada.ListViewFaltas;
 import br.gov.ma.detran.examespraticosmobile.sqlite.contract.AGC_FaltaContract;
 import br.gov.ma.detran.examespraticosmobile.sqlite.contract.AGC_Prova_FaltasContract;
+import br.gov.ma.detran.examespraticosmobile.sqlite.contract.AGC_Provas_CandidatosContract;
 import br.gov.ma.detran.examespraticosmobile.sqlite.handler.AGC_ExamesPraticosDbHandler;
 import br.gov.ma.detran.examespraticosmobile.util.NegocioException;
 
@@ -39,14 +41,18 @@ public class AGC_Prova_FaltasOperations {
     }
 
     public void inserir(AGC_Prova_Falta agcProvaFalta) throws NegocioException {
-
         ContentValues contentValues = retornarContentValues_AGC_Prova_Falta(agcProvaFalta);
-
-        final long insert = database.insert(AGC_Prova_FaltasContract.AGC_Prova_FaltasEntry.TABLE_NAME, null, contentValues);
-
-        if (insert ==-1)
+        long insert;
+        if(agcProvaFalta.getId() == null){
+            insert = database.insert(AGC_Prova_FaltasContract.AGC_Prova_FaltasEntry.TABLE_NAME, null, contentValues);
+        } else{
+            insert = database.update(AGC_Prova_FaltasContract.AGC_Prova_FaltasEntry.TABLE_NAME,
+                    contentValues, AGC_Prova_FaltasContract.AGC_Prova_FaltasEntry.COLUMN_CPF_CANDIDATO + " = ? ",
+                    new String[]{String.valueOf(agcProvaFalta.getId())});
+        }
+        if (insert == -1){
             throw new NegocioException("Erro ao inserir registro");
-
+        }
     }
 
     public void limparTabela() throws NegocioException {
@@ -63,8 +69,7 @@ public class AGC_Prova_FaltasOperations {
                     + "and " + AGC_Prova_FaltasContract.AGC_Prova_FaltasEntry.COLUMN_TIPO_FALTA +  " = ? "
                     + "and " + AGC_Prova_FaltasContract.AGC_Prova_FaltasEntry.COLUMN_ITEM_LETRA + " = " + AGC_FaltaContract.AGC_FaltaEntry.TABLE_NAME + "." + AGC_FaltaContract.AGC_FaltaEntry.COLUMN_ITEM_LETRA + ") quantidade "
                     + "FROM " + AGC_FaltaContract.AGC_FaltaEntry.TABLE_NAME + " where " + AGC_FaltaContract.AGC_FaltaEntry.COLUMN_TIPO_FALTA + " = ? "
-                    + "and " + AGC_FaltaContract.AGC_FaltaEntry.COLUMN_TIPO_EXAME + " = ? "
-                ;
+                    + "and " + AGC_FaltaContract.AGC_FaltaEntry.COLUMN_TIPO_EXAME + " = ? ";
 
         Cursor cursor = database.rawQuery(sql, new String[]{cpfCandidato, tipoExame, tipoFalta, tipoFalta, tipoExame});
 
@@ -120,7 +125,7 @@ public class AGC_Prova_FaltasOperations {
         return agcProvaFalta;
     }
 
-    public void atualizarQuantidadeDeFaltas(AGC_Prova_Falta agcProvaFalta) throws NegocioException {
+    public void atualizarFalta(AGC_Prova_Falta agcProvaFalta) throws NegocioException {
 
         ContentValues contentValues = retornarContentValues_AGC_Prova_Falta(agcProvaFalta);
 
@@ -138,7 +143,6 @@ public class AGC_Prova_FaltasOperations {
 
         if (update ==-1)
             throw new NegocioException("Erro ao atualizar registro");
-
     }
 
     public void removerProvaFalta(AGC_Prova_Falta agcProvaFalta) throws NegocioException {
@@ -169,8 +173,10 @@ public class AGC_Prova_FaltasOperations {
 
     }
 
+    @SuppressLint("Range")
     private AGC_Prova_Falta setCursor(Cursor cursor){
         AGC_Prova_Falta agcProvaFalta = new AGC_Prova_Falta();
+        agcProvaFalta.setId(cursor.getLong(cursor.getColumnIndex(AGC_Prova_FaltasContract.AGC_Prova_FaltasEntry.COLUMN_ID)));
         agcProvaFalta.setCpfCandidato(cursor.getString(cursor.getColumnIndex(AGC_Prova_FaltasContract.AGC_Prova_FaltasEntry.COLUMN_CPF_CANDIDATO)));
         agcProvaFalta.setDataExame(cursor.getString(cursor.getColumnIndex(AGC_Prova_FaltasContract.AGC_Prova_FaltasEntry.COLUMN_DATA_EXAME)));
         agcProvaFalta.setLocalExame(cursor.getString(cursor.getColumnIndex(AGC_Prova_FaltasContract.AGC_Prova_FaltasEntry.COLUMN_LOCAL_EXAME)));
@@ -180,6 +186,7 @@ public class AGC_Prova_FaltasOperations {
         agcProvaFalta.setQuantidadeDeFaltas(cursor.getInt(cursor.getColumnIndex(AGC_Prova_FaltasContract.AGC_Prova_FaltasEntry.COLUMN_QUANTIDADE_FALTAS)));
         agcProvaFalta.setCpfInclusao(cursor.getString(cursor.getColumnIndex(AGC_Prova_FaltasContract.AGC_Prova_FaltasEntry.COLUMN_CPF_INCLUSAO)));
         agcProvaFalta.setDataHoraInclusao(cursor.getString(cursor.getColumnIndex(AGC_Prova_FaltasContract.AGC_Prova_FaltasEntry.COLUMN_DATAHORA_INCLUSAO)));
+        agcProvaFalta.setObservacoes(cursor.getString(cursor.getColumnIndex(AGC_Prova_FaltasContract.AGC_Prova_FaltasEntry.COLUMN_OBSERVACOES)));
 
         return agcProvaFalta;
     }
@@ -198,11 +205,9 @@ public class AGC_Prova_FaltasOperations {
         }
 
         return lista;
-
     }
 
     private List<ListViewFaltas> manipularCursorListViewFaltas(Cursor cursor){
-
         List<ListViewFaltas> lista = null;
 
         if(cursor.getCount() > 0) {
@@ -213,13 +218,10 @@ public class AGC_Prova_FaltasOperations {
                 lista.add(l);
             }
         }
-
         return lista;
-
     }
 
     private ListViewFaltas setCursorListViewFaltas(Cursor cursor){
-
         ListViewFaltas listViewFaltas = null;
 
         listViewFaltas = new ListViewFaltas();
@@ -233,11 +235,12 @@ public class AGC_Prova_FaltasOperations {
         listViewFaltas.setQuantidade(quantidade);
 
         return listViewFaltas;
-
     }
 
     private ContentValues retornarContentValues_AGC_Prova_Falta(AGC_Prova_Falta agcProvaFalta){
         ContentValues contentValues = new ContentValues();
+        contentValues.put(AGC_Prova_FaltasContract.AGC_Prova_FaltasEntry.COLUMN_ID, agcProvaFalta.getId());
+        contentValues.put(AGC_Prova_FaltasContract.AGC_Prova_FaltasEntry.COLUMN_CPF_CANDIDATO, agcProvaFalta.getCpfCandidato());
         contentValues.put(AGC_Prova_FaltasContract.AGC_Prova_FaltasEntry.COLUMN_CPF_CANDIDATO, agcProvaFalta.getCpfCandidato());
         contentValues.put(AGC_Prova_FaltasContract.AGC_Prova_FaltasEntry.COLUMN_DATA_EXAME, agcProvaFalta.getDataExame());
         contentValues.put(AGC_Prova_FaltasContract.AGC_Prova_FaltasEntry.COLUMN_LOCAL_EXAME, agcProvaFalta.getLocalExame());
@@ -247,6 +250,7 @@ public class AGC_Prova_FaltasOperations {
         contentValues.put(AGC_Prova_FaltasContract.AGC_Prova_FaltasEntry.COLUMN_QUANTIDADE_FALTAS, agcProvaFalta.getQuantidadeDeFaltas());
         contentValues.put(AGC_Prova_FaltasContract.AGC_Prova_FaltasEntry.COLUMN_CPF_INCLUSAO, agcProvaFalta.getCpfInclusao());
         contentValues.put(AGC_Prova_FaltasContract.AGC_Prova_FaltasEntry.COLUMN_DATAHORA_INCLUSAO, agcProvaFalta.getDataHoraInclusao());
+        contentValues.put(AGC_Prova_FaltasContract.AGC_Prova_FaltasEntry.COLUMN_OBSERVACOES, agcProvaFalta.getObservacoes());
         return contentValues;
     }
 
