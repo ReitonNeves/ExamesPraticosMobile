@@ -172,27 +172,14 @@ public class SelecionarCandidatoActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 AGC_Prova_Candidato agcProvaCandidatoSelecionado = agcProvaCandidatoParaExaminadorList.get(position); //  parent.getItemAtPosition(position).toString();
 
-                if (agcProvaCandidatoSelecionado.getSituacao().equals("S") && agcUsuario.getTipoUsuario().equals("E")){
-                    String cpfCandidato = ZeroEsquerdaUtil.preencher(11, agcProvaCandidatoSelecionado.getCpfCandidato());
-                    String mensagem = "Deseja iniciar a prova do Candidato "
-                            + agcProvaCandidatoSelecionado.getNome()
-                            + ", CPF " + cpfCandidato.substring(0,3) + "."
-                            + cpfCandidato.substring(3,6) + "."
-                            + cpfCandidato.substring(6,9) + "-"
-                            + cpfCandidato.substring(9,11);
+                if (agcProvaCandidatoSelecionado.getSituacao().equals("S")){
 
-                    confirmDialogIniciarExame(mensagem, agcProvaCandidatoSelecionado);
+                    confirmDialogIniciarExame(agcProvaCandidatoSelecionado);
 
                 } else if(agcProvaCandidatoSelecionado.getSituacao().equals("S")){//Refatorar
-                    String cpfCandidato = ZeroEsquerdaUtil.preencher(11, agcProvaCandidatoSelecionado.getCpfCandidato());
-                    String mensagem = "Deseja registrar a presenca do Candidato "
-                            + agcProvaCandidatoSelecionado.getNome()
-                            + ", CPF " + cpfCandidato.substring(0,3) + "."
-                            + cpfCandidato.substring(3,6) + "."
-                            + cpfCandidato.substring(6,9) + "-"
-                            + cpfCandidato.substring(9,11);
 
-                    confirmDialogRegistrarPresnca(mensagem, agcProvaCandidatoSelecionado);
+                    confirmDialogRegistrarPresnca(agcProvaCandidatoSelecionado);
+
                 } else {
                     MensagemErroUtil.mostrar("Situação inválida.", view.getContext());
                 }
@@ -200,8 +187,12 @@ public class SelecionarCandidatoActivity extends AppCompatActivity {
         });
     }
 
-    private void confirmDialogIniciarExame(String mensagem, final AGC_Prova_Candidato agcProvaCandidatoSelecionado) {
+    private void confirmDialogIniciarExame(final AGC_Prova_Candidato agcProvaCandidatoSelecionado) {
         final Context context = this;
+        String cpfCandidato = ZeroEsquerdaUtil.preencher(11, agcProvaCandidatoSelecionado.getCpfCandidato());
+        String mensagem = "Deseja iniciar a prova do Candidato "
+                + agcProvaCandidatoSelecionado.getNome()
+                + ", CPF " + CPFUtil.formatar(cpfCandidato);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(mensagem)
@@ -224,10 +215,14 @@ public class SelecionarCandidatoActivity extends AppCompatActivity {
                 .show();
     }
 
-    private void confirmDialogRegistrarPresnca(String mensagem, final AGC_Prova_Candidato agcProvaCandidatoSelecionado) {
+    private void confirmDialogRegistrarPresnca(final AGC_Prova_Candidato agcProvaCandidatoSelecionado) {
         final Context context = this;
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        String cpfCandidato = ZeroEsquerdaUtil.preencher(11, agcProvaCandidatoSelecionado.getCpfCandidato());
+        String mensagem = "Deseja registrar a presença do candidato "
+                + agcProvaCandidatoSelecionado.getNome()
+                + ", CPF " + CPFUtil.formatar(cpfCandidato);
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(mensagem)
                 .setPositiveButton("Sim",  new DialogInterface.OnClickListener() {
                     @Override
@@ -251,17 +246,14 @@ public class SelecionarCandidatoActivity extends AppCompatActivity {
     public void showDialogPreExame( AGC_Prova_Candidato agcProvaCandidatoSelecionado) throws NegocioException {
         final Context context = this;
         final AGC_Usuario agcUsuario = ParametrosAcessoUtil.getAgcUsuarioLogado();
-        //final AGC_Prova_Candidato agcProvaCandidato = agcProvasCandidatosService.retornarPorID(String.valueOf(agcProvaCandidatoSelecionado.getId()),this);
 
         LayoutInflater li = getLayoutInflater();
         View view = li.inflate(R.layout.dialog_pre_exame, null);
 
         EditText mPlaca = view.findViewById(R.id.txtPlacaVeiculo);
         mPlaca.addTextChangedListener(MaskEditUtil.mask(mPlaca, MaskEditUtil.FORMAT_PLACA));
-
         EditText mDataValLadv = view.findViewById(R.id.txtValidadeLadv);
         mDataValLadv.addTextChangedListener(MaskEditUtil.mask(mDataValLadv, MaskEditUtil.FORMAT_DATE));
-
         EditText mTextCpfExaminador1 = view.findViewById(R.id.txtCpfExaminador1);
         mTextCpfExaminador1.addTextChangedListener(MaskEditUtil.mask(mTextCpfExaminador1, MaskEditUtil.FORMAT_CPF));
         mTextCpfExaminador1.setText(agcUsuario.getCpfUsuario());
@@ -282,6 +274,7 @@ public class SelecionarCandidatoActivity extends AppCompatActivity {
                         agcProvaCandidatoSelecionado.setPlaca(placa);
                         agcProvaCandidatoSelecionado.setValidadeLadv(DataHoraUtil.formataData(dataValLadv));
                         AGC_Usuario usuario = agcUsuariosService.retornarPorCpf(CPFUtil.formatarSemCaracteres(cpf2), SelecionarCandidatoActivity.this);
+
                         if(Objects.isNull(usuario)){
                             MensagemOkUtil.mostrar("Examinador não encontrado para o cpf informado.", context);
                         } else if(agcProvaCandidatoSelecionado.getSituacao().equals("S")) {
