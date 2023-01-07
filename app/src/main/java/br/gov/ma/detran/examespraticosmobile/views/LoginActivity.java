@@ -32,13 +32,10 @@ import br.gov.ma.detran.examespraticosmobile.util.ParametrosAcessoUtil;
 import br.gov.ma.detran.examespraticosmobile.util.SenhaUtil;
 
 public class LoginActivity extends AppCompatActivity {
-
     private EditText mLoginView;
     private EditText mPasswordView;
-
     private View mProgressView;
     private View mLoginFormView;
-
     private ParametrosAcessoUtil parametrosAcessoUtil;
 
     @Override
@@ -46,15 +43,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        /*if (android.os.Build.VERSION.SDK_INT > 9)
-        {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-            Window window = this.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.colorPrimary));
-        }*/
         ColorStatusBarUtil.setColorStatusBar(this);
 
         mProgressView = findViewById(R.id.progressBarLogin);
