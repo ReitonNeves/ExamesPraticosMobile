@@ -39,7 +39,6 @@ import br.gov.ma.detran.examespraticosmobile.util.NegocioException;
 import br.gov.ma.detran.examespraticosmobile.util.ParametrosAcessoUtil;
 
 public class ImportarActivity extends AppCompatActivity {
-
     private EditText mTextDataExameInicial;
     private EditText mTextDataExameFinal;
     private EditText mTextCpfExaminador1;
@@ -48,9 +47,7 @@ public class ImportarActivity extends AppCompatActivity {
     private RadioButton mExame2Rodas;
     private RadioButton mExame4Rodas;
     private EditText mLocalExame;
-
     private Button mBotaoImportar;
-
     private View mProgressView;
     private View mFormView;
 
@@ -133,7 +130,7 @@ public class ImportarActivity extends AppCompatActivity {
         mBotaoImportar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Connection connection = null;
+
                 mTextDataExameInicial = findViewById(R.id.txtDataExameInicial);
                 mTextDataExameFinal = findViewById(R.id.txtDataExameFinal);
                 String tipoExame  = findViewById(radioGroup.getCheckedRadioButtonId()).getTag().toString();
@@ -141,6 +138,7 @@ public class ImportarActivity extends AppCompatActivity {
                 //mExame4Rodas = findViewById(R.id.radExame4Rodas);
                 mLocalExame= findViewById(R.id.autoCompleteLocalDeProva);
 
+                Connection connection = null;
                 /*try {
                     Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
                     connection = DriverManager.getConnection("jdbc:sqlserver://10.39.11.72:1433;databaseName=dbDetranNet;encrypt=false;useSSL=false", "DETRAN_reiton", "rnm8eletro");
@@ -153,10 +151,8 @@ public class ImportarActivity extends AppCompatActivity {
                 }*/
 
                 try {
-                   final AGC_Usuario agcUsuario = ParametrosAcessoUtil.getAgcUsuarioLogado();
-                    if (agcUsuario != null && agcUsuario.getTipoUsuario().equals("")) {//Alterado para testes
-                        MensagemErroUtil.mostrar("Somente usuários com perfil Gestor podem utilizar este recurso.", view.getContext());
-                    } else {
+                    final AGC_Usuario agcUsuario = ParametrosAcessoUtil.getAgcUsuarioLogado();
+
                         /*String tipoExame = "";
                         if (mExame2Rodas.isChecked()) {
                             tipoExame = "1";
@@ -164,31 +160,22 @@ public class ImportarActivity extends AppCompatActivity {
                             tipoExame = "2";
                         }*/
 
-                        String dataExameInicial = DataHoraUtil.formataData(mTextDataExameInicial.getText().toString());
-                        String dataExameFinal = DataHoraUtil.formataData(mTextDataExameFinal.getText().toString());
+                    String dataExameInicial = DataHoraUtil.formataData(mTextDataExameInicial.getText().toString());
+                    String dataExameFinal = DataHoraUtil.formataData(mTextDataExameFinal.getText().toString());
 
-
-                        AGC_LocalDeProva agcLocalDeProva = agcLocalDeProvaService.retornarPorDescricao(mLocalExame.getText().toString(), view.getContext());
-                        if (agcLocalDeProva == null) {
-                            throw new NegocioException("Local não informado ou inválido.");
-                        }
-                        agcProvasCandidatosSinc.sincronizarAgendas(dataExameInicial, dataExameFinal, agcLocalDeProva.getId().toString(), tipoExame, view.getContext());
-                        MensagemOkUtil.mostrar("Agendas Sincronizadas com sucesso.", view.getContext());
-
+                    AGC_LocalDeProva agcLocalDeProva = agcLocalDeProvaService.retornarPorDescricao(mLocalExame.getText().toString(), view.getContext());
+                    if (agcLocalDeProva == null) {
+                        throw new NegocioException("Local não informado ou inválido.");
                     }
-                } catch (Exception ex){
+                    agcProvasCandidatosSinc.sincronizarAgendas(dataExameInicial, dataExameFinal, agcLocalDeProva.getId().toString(), tipoExame, view.getContext());
+                    MensagemOkUtil.mostrar("Agendas Sincronizadas com sucesso.", view.getContext());
+
+                } catch (Exception ex) {
                     ex.printStackTrace();
                     MensagemErroUtil.mostrar(ex.getMessage(), view.getContext());
                 }
             }
         });
-    }
-
-    private String formataData(String data) throws Exception {
-        if (Objects.isNull(data) || data.isEmpty()){
-            throw new Exception("Data inválida.");
-        }
-        return data.substring(6, 10) + "-" + data.substring(3,5) + "-" + data.substring(0,2);
     }
 
     private void mTextDataExameInicial_addTextChangedListener(){
