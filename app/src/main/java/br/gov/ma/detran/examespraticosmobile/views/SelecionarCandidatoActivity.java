@@ -45,7 +45,6 @@ import br.gov.ma.detran.examespraticosmobile.util.ParametrosAcessoUtil;
 import br.gov.ma.detran.examespraticosmobile.util.ZeroEsquerdaUtil;
 
 public class SelecionarCandidatoActivity extends AppCompatActivity {
-
     private AGC_Provas_CandidatosService agcProvasCandidatosService = new AGC_Provas_CandidatosService();
     private AGC_UsuariosService agcUsuariosService = new AGC_UsuariosService();
     private EditText mDataExame;
@@ -56,10 +55,7 @@ public class SelecionarCandidatoActivity extends AppCompatActivity {
     private ImageButton mBotaoBuscar;
     private TextView mTextView6;
     AlertDialog alertDialog;
-
     private View mProgressView;
-    //private View mFormView;
-
     private List<AGC_Prova_Candidato> agcProvaCandidatoParaExaminadorList;
 
     @Override
@@ -88,12 +84,10 @@ public class SelecionarCandidatoActivity extends AppCompatActivity {
         mListaCandidato.setVisibility(View.INVISIBLE);
 
          mProgressView = this.findViewById(R.id.progressBarSelecionarCandidato);
-        //mFormView = this.findViewById(R.id.formContentImportar);
 
         checarSeJaHaUmaProvaIniciada();
 
         mBotaoBuscar_setOnClickListener();
-
         mListaCandidato_setOnItemClickListener();
 
         mDataExame_addTextChangedListener();
@@ -142,20 +136,9 @@ public class SelecionarCandidatoActivity extends AppCompatActivity {
 
     private void mBotaoBuscar_setOnClickListener(){
         mBotaoBuscar = this.findViewById(R.id.btnBuscar);
-
-        final AGC_Usuario agcUsuario = ParametrosAcessoUtil.getAgcUsuarioLogado();
-        /*if (agcUsuario != null) {
-            if (agcUsuario.getTipoUsuario().equals("G")){
-                mBotaoBuscar.setEnabled(false);
-            } else {
-                mBotaoBuscar.setEnabled(true);
-            }
-        }*/
-
         mBotaoBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 try {
                     String turma = mTurma.getText().toString();
                     String dataExame = mDataExame.getText().toString();
@@ -219,8 +202,8 @@ public class SelecionarCandidatoActivity extends AppCompatActivity {
 
     private void confirmDialogIniciarExame(String mensagem, final AGC_Prova_Candidato agcProvaCandidatoSelecionado) {
         final Context context = this;
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(mensagem)
                 .setPositiveButton("Sim",  new DialogInterface.OnClickListener() {
                     @Override
@@ -269,12 +252,6 @@ public class SelecionarCandidatoActivity extends AppCompatActivity {
         final Context context = this;
         final AGC_Usuario agcUsuario = ParametrosAcessoUtil.getAgcUsuarioLogado();
         //final AGC_Prova_Candidato agcProvaCandidato = agcProvasCandidatosService.retornarPorID(String.valueOf(agcProvaCandidatoSelecionado.getId()),this);
-
-        if (!agcUsuario.getTipoUsuario().equals("E")){
-            MensagemErroUtil.mostrar("Situação inválida. O usuário logado não tem permissão para aplicar prova.", this);
-        } else {
-
-        }
 
         LayoutInflater li = getLayoutInflater();
         View view = li.inflate(R.layout.dialog_pre_exame, null);
@@ -355,7 +332,6 @@ public class SelecionarCandidatoActivity extends AppCompatActivity {
 
         EditText mPlaca = view.findViewById(R.id.txtPlacaVeiculo);
         mPlaca.addTextChangedListener(MaskEditUtil.mask(mPlaca, MaskEditUtil.FORMAT_PLACA));
-
         EditText mDataValLadv = view.findViewById(R.id.txtValidadeLadv);
         mDataValLadv.addTextChangedListener(MaskEditUtil.mask(mDataValLadv, MaskEditUtil.FORMAT_DATE));
 
@@ -402,13 +378,6 @@ public class SelecionarCandidatoActivity extends AppCompatActivity {
 
     }
 
-    private void direcionarParaAplicarProva(AGC_Prova_Candidato agcProvaCandidatoSelecionado) {
-        Intent objIndent = new Intent(getApplicationContext(), AplicarProvaActivity.class);
-        objIndent.putExtra("idCandidatoSelecionado", agcProvaCandidatoSelecionado.getId().toString());
-        startActivity(objIndent);
-        finishAffinity();
-    }
-
     private void preencheListaDeCandidatos(String dataExame, String tipoExame, String turma) throws NegocioException {
         final AGC_Usuario agcUsuario = ParametrosAcessoUtil.getAgcUsuarioLogado();
 
@@ -445,6 +414,13 @@ public class SelecionarCandidatoActivity extends AppCompatActivity {
                     listaCandidatos);
             mListaCandidato.setAdapter(adapter);
         }
+    }
+
+    private void direcionarParaAplicarProva(AGC_Prova_Candidato agcProvaCandidatoSelecionado) {
+        Intent objIndent = new Intent(getApplicationContext(), AplicarProvaActivity.class);
+        objIndent.putExtra("idCandidatoSelecionado", agcProvaCandidatoSelecionado.getId().toString());
+        startActivity(objIndent);
+        finishAffinity();
     }
 
     private void direcionarParaLogin(){

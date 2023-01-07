@@ -44,8 +44,6 @@ public class ImportarActivity extends AppCompatActivity {
     private EditText mTextCpfExaminador1;
     private EditText mTextCpfExaminador2;
     private RadioGroup radioGroup;
-    private RadioButton mExame2Rodas;
-    private RadioButton mExame4Rodas;
     private EditText mLocalExame;
     private Button mBotaoImportar;
     private View mProgressView;
@@ -133,35 +131,13 @@ public class ImportarActivity extends AppCompatActivity {
 
                 mTextDataExameInicial = findViewById(R.id.txtDataExameInicial);
                 mTextDataExameFinal = findViewById(R.id.txtDataExameFinal);
-                String tipoExame  = findViewById(radioGroup.getCheckedRadioButtonId()).getTag().toString();
-                //mExame2Rodas = findViewById(R.id.radExame2Rodas);
-                //mExame4Rodas = findViewById(R.id.radExame4Rodas);
+                RadioButton radioButtonSelecionado = findViewById(radioGroup.getCheckedRadioButtonId());
                 mLocalExame= findViewById(R.id.autoCompleteLocalDeProva);
 
-                Connection connection = null;
-                /*try {
-                    Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-                    connection = DriverManager.getConnection("jdbc:sqlserver://10.39.11.72:1433;databaseName=dbDetranNet;encrypt=false;useSSL=false", "DETRAN_reiton", "rnm8eletro");
-                    PreparedStatement pstmt = connection.prepareStatement("{call dbo.stp_Ren_TurmaPratico_Rel()}");
-                    ResultSet rs = pstmt.executeQuery();
-                } catch(SQLException e){
-                    e.printStackTrace();
-                } catch(ClassNotFoundException e ){
-                    e.printStackTrace();
-                }*/
-
                 try {
-                    final AGC_Usuario agcUsuario = ParametrosAcessoUtil.getAgcUsuarioLogado();
-
-                        /*String tipoExame = "";
-                        if (mExame2Rodas.isChecked()) {
-                            tipoExame = "1";
-                        } else if (mExame4Rodas.isChecked()) {
-                            tipoExame = "2";
-                        }*/
-
                     String dataExameInicial = DataHoraUtil.formataData(mTextDataExameInicial.getText().toString());
                     String dataExameFinal = DataHoraUtil.formataData(mTextDataExameFinal.getText().toString());
+                    String tipoExame  = radioButtonSelecionado.getTag().toString();
 
                     AGC_LocalDeProva agcLocalDeProva = agcLocalDeProvaService.retornarPorDescricao(mLocalExame.getText().toString(), view.getContext());
                     if (agcLocalDeProva == null) {

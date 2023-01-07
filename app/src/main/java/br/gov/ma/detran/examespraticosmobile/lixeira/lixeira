@@ -4,3 +4,15 @@ final AGC_Usuario agcUsuario = parametrosAcessoUtil.getAgcUsuarioLogado();
                 card.setEnabled(false);
             }
 }
+
+Connection connection = null;
+                /*try {
+                    Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+                    connection = DriverManager.getConnection("jdbc:sqlserver://10.39.11.72:1433;databaseName=dbDetranNet;encrypt=false;useSSL=false", "DETRAN_reiton", "****");
+                    PreparedStatement pstmt = connection.prepareStatement("{call dbo.stp_Ren_TurmaPratico_Rel()}");
+                    ResultSet rs = pstmt.executeQuery();
+                } catch(SQLException e){
+                    e.printStackTrace();
+                } catch(ClassNotFoundException e ){
+                    e.printStackTrace();
+                }*/
