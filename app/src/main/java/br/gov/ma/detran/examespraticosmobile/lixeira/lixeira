@@ -1,0 +1,6 @@
+final AGC_Usuario agcUsuario = parametrosAcessoUtil.getAgcUsuarioLogado();
+        if (agcUsuario != null) {
+            if (agcUsuario.getTipoUsuario().equals("G")){
+                card.setEnabled(false);
+            }
+}

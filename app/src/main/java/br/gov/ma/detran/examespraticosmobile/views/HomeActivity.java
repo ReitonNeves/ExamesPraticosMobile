@@ -27,8 +27,7 @@ import br.gov.ma.detran.examespraticosmobile.util.MensagemErroUtil;
 import br.gov.ma.detran.examespraticosmobile.util.NegocioException;
 import br.gov.ma.detran.examespraticosmobile.util.ParametrosAcessoUtil;
 
-public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private ParametrosAcessoUtil parametrosAcessoUtil;
     private AGC_Provas_CandidatosService agcProvasCandidatosService = new AGC_Provas_CandidatosService();
@@ -38,17 +37,15 @@ public class HomeActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        ColorStatusBarUtil.setColorStatusBar(this);
         setSupportActionBar(toolbar);
 
-        ColorStatusBarUtil.setColorStatusBar(this);
+        parametrosAcessoUtil=((ParametrosAcessoUtil)getApplicationContext());
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
-        parametrosAcessoUtil=((ParametrosAcessoUtil)getApplicationContext());
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -60,18 +57,9 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void btnSincronizarAgenda_setOnClickListener(){
-        //NavigationView navigationView = findViewById(R.id.nav_view);
-        //View headerView = navigationView.getHeaderView(0);
         CardView card = findViewById(R.id.card_carregar_exames);
 
         final AGC_Usuario agcUsuario = parametrosAcessoUtil.getAgcUsuarioLogado();
-        if (agcUsuario != null) {
-            if (agcUsuario.getTipoUsuario().equals("E")){
-                //bSincronizarAgenda.setEnabled(false);
-            } else {
-
-            }
-        }
 
         card.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,8 +78,8 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void btnAplicarProva_setOnClickListener(){
-        CardView card = findViewById(R.id.card_aplicar_exame);
         final Context context = this;
+        CardView card = findViewById(R.id.card_aplicar_exame);
 
         card.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,13 +97,6 @@ public class HomeActivity extends AppCompatActivity
                 }
             }
         });
-
-        final AGC_Usuario agcUsuario = parametrosAcessoUtil.getAgcUsuarioLogado();
-        if (agcUsuario != null) {
-            if (agcUsuario.getTipoUsuario().equals("G")){
-                card.setEnabled(false);
-            }
-        }
     }
 
     private void btnFecharAgenda_setOnClickListener(){
@@ -124,9 +105,6 @@ public class HomeActivity extends AppCompatActivity
         card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*Intent objIndent = new Intent(getApplicationContext(), AplicarExameActivity.class);
-                startActivity(objIndent);
-                finishAffinity();*/
                 direcionarParaFecharAgenda();
             }
         });
@@ -136,14 +114,6 @@ public class HomeActivity extends AppCompatActivity
         //Button bRegistroDePresenca = findViewById(R.id.btnRegistroDePresenca);
         //bRegistroDePresenca.setEnabled(false);
         final Context context = this;
-
-        final AGC_Usuario agcUsuario = parametrosAcessoUtil.getAgcUsuarioLogado();
-        if (agcUsuario != null) {
-            if (agcUsuario.getTipoUsuario().equals("E")){
-                //bRegistroDePresenca.setEnabled(false);
-            }
-        }
-
         CardView card = findViewById(R.id.card_registrar_presenca_candidatos);
 
         card.setOnClickListener(new View.OnClickListener() {
@@ -219,13 +189,6 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        /*if (id == R.id.nav_importar) {
-            direcionarParaImportar();
-        } else if (id == R.id.nav_aplicar) {
-
-        } else if (id == R.id.nav_fechar) {
-
-        } else*/
         if (id == R.id.nav_sair) {
             parametrosAcessoUtil.setAgcUsuarioLogado(null);
             direcionarParaLogin();
