@@ -29,6 +29,7 @@ import br.gov.ma.detran.examespraticosmobile.service.AGC_UsuariosService;
 import br.gov.ma.detran.examespraticosmobile.sincronizacao.AGC_FaltaSinc;
 import br.gov.ma.detran.examespraticosmobile.sincronizacao.AGC_LocalDeProvaSinc;
 import br.gov.ma.detran.examespraticosmobile.sincronizacao.AGC_UsuariosSinc;
+import br.gov.ma.detran.examespraticosmobile.util.ColorStatusBarUtil;
 import br.gov.ma.detran.examespraticosmobile.util.MensagemErroUtil;
 import br.gov.ma.detran.examespraticosmobile.util.NegocioException;
 
@@ -42,15 +43,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (android.os.Build.VERSION.SDK_INT > 9)
-        {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-            Window window = this.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(this.getResources().getColor(R.color.colorBlue));
-        }
+        ColorStatusBarUtil.setColorStatusBar(this);
 
         mProgressView = this.findViewById(R.id.progressBarImportar);
         mFormView = this.findViewById(R.id.formContentImportar);

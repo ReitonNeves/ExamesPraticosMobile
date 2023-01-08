@@ -8,11 +8,8 @@ import android.os.Build;
 import android.os.Environment;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -51,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         mLoginView = findViewById(R.id.txtLogin);
         mPasswordView = findViewById(R.id.txtSenha);
 
-        Button mLoginButton = (Button) findViewById(R.id.btnLogin);
+        Button mLoginButton = (Button) findViewById(R.id.btnImportar);
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
