@@ -21,7 +21,7 @@ public class ConstantesUtil {
 
     private void setValoresLocalhost() {
         ambiente = Ambiente.LOCALHOST;
-        URL_REST = "http://localhost:8080/ExamesPraticosRest/rest";
+        URL_REST = "http://10.39.11.61:8080/ExamesPraticosRest/rest";
         URL_WEBSERVICE_RESULTADO_EXAME_DETRANNET = "https://ws.homologacao.detrannet.detran.ma.gov.br/wsResultadoExames/wsResultadoExames.asmx";
 //        URL_REST = "http://192.168.0.170:7080/ExamesPraticosRest/rest";
 //        URL_REST = "http://192.168.0.149:9080/ExamesPraticosRest/rest";
@@ -51,6 +51,7 @@ public class ConstantesUtil {
     }
 
     public enum Ambiente {
+
         LOCALHOST(1),
         DESENVOLVIMENTO(2),
         PRODUCAO(3);
