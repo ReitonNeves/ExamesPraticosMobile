@@ -62,10 +62,9 @@ public class LoginActivity extends AppCompatActivity {
         try {
             File sd = Environment.getExternalStorageDirectory();
             File data = Environment.getDataDirectory();
-            File doc = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download");
+            File doc = new File(sd.getAbsolutePath() + "/Download");
 
-            //if (sd.canWrite())
-            //{
+            if (sd.canWrite()){
                 String currentDBPath = "/data/br.gov.ma.detran.examespraticosmobile/databases/AGC_ExamesPraticosDb.db";
                 String backupDBPath = "AGC_ExamesPraticosDb2.db";
                 File currentDB = new File(data, currentDBPath);
@@ -79,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                     dst.close();
                     Toast.makeText(this, "Backup Complete", Toast.LENGTH_SHORT).show();
                 }
-            //}
+            }
         }
         catch (Exception e) {
             Log.w("Settings Backup", e);

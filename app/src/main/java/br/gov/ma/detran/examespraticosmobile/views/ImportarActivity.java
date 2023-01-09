@@ -65,8 +65,8 @@ public class ImportarActivity extends AppCompatActivity {
 
         ColorStatusBarUtil.setColorStatusBar(this);
 
-        mProgressView = this.findViewById(R.id.progressBarImportar);
-        mFormView = this.findViewById(R.id.formContentImportar);
+        //mProgressView = this.findViewById(R.id.progressBarImportar);
+        //mFormView = this.findViewById(R.id.formContentImportar);
         radioGroup = findViewById(R.id.radioGroup);
 
         try {
@@ -99,17 +99,6 @@ public class ImportarActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) { //Botão adicional na ToolBar
-        switch (item.getItemId()) {
-            case android.R.id.home:  //ID do seu botão (gerado automaticamente pelo android, usando como está, deve funcionar
-                direcionarParaHome();
-                break;
-            default:break;
-        }
-        return true;
-    }
-
-    @Override
     public void onBackPressed(){ //Botão BACK padrão do android
         direcionarParaHome();
     }
@@ -128,7 +117,6 @@ public class ImportarActivity extends AppCompatActivity {
         mBotaoImportar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 mTextDataExameInicial = findViewById(R.id.txtDataExameInicial);
                 mTextDataExameFinal = findViewById(R.id.txtDataExameFinal);
                 RadioButton radioButtonSelecionado = findViewById(radioGroup.getCheckedRadioButtonId());
@@ -145,7 +133,6 @@ public class ImportarActivity extends AppCompatActivity {
                     }
                     agcProvasCandidatosSinc.sincronizarAgendas(dataExameInicial, dataExameFinal, agcLocalDeProva.getId().toString(), tipoExame, view.getContext());
                     MensagemOkUtil.mostrar("Agendas Sincronizadas com sucesso.", view.getContext());
-
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     MensagemErroUtil.mostrar(ex.getMessage(), view.getContext());
@@ -179,7 +166,7 @@ public class ImportarActivity extends AppCompatActivity {
     /**
      * Shows the progress UI and hides the login form.
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    /*@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
@@ -210,6 +197,6 @@ public class ImportarActivity extends AppCompatActivity {
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
-    }
+    }*/
 
 }

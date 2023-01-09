@@ -18,10 +18,9 @@
             android:background="@color/colorPrimary"
             app:popupTheme="@style/PopupOverlay" />
 
+        <include layout="@layout/content_importar" />
 
 
     </com.google.android.material.appbar.AppBarLayout>
-
-    <include layout="@layout/content_importar" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

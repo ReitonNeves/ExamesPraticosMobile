@@ -45,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
 
         ColorStatusBarUtil.setColorStatusBar(this);
 
-        mProgressView = this.findViewById(R.id.progressBarImportar);
-        mFormView = this.findViewById(R.id.formContentImportar);
+        //mProgressView = this.findViewById(R.id.progressBarImportar);
+        //mFormView = this.findViewById(R.id.formContentImportar);
 
         iniciarAplicacao();
 

@@ -5,12 +5,13 @@
         android:id="@+id/action_finalizar"
         android:orderInCategory="100"
         android:title="FINALIZAR"
-        android:icon="@drawable/ic_menu_send"
+        android:icon="@drawable/ic_baseline_cancel_24"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_interromper"
         android:orderInCategory="100"
         android:title="INTERROMPER EXAME"
+        android:icon="@drawable/ic_baseline_pause_circle_filled_24"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_ausentar"

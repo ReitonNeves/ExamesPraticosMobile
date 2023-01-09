@@ -19,27 +19,29 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
             android:name="br.gov.ma.detran.examespraticosmobile.views.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="br.gov.ma.detran.examespraticosmobile.views.LoginActivity" />
+        <activity android:name="br.gov.ma.detran.examespraticosmobile.views.LoginActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name="br.gov.ma.detran.examespraticosmobile.views.HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name="br.gov.ma.detran.examespraticosmobile.views.ImportarActivity"
             android:label="@string/title_activity_importar"
             android:parentActivityName="br.gov.ma.detran.examespraticosmobile.views.HomeActivity"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.gov.ma.detran.examespraticosmobile.views.HomeActivity" />
@@ -71,7 +73,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.gov.ma.detran.examespraticosmobile.views.HomeActivity" />
         </activity>
-        <activity
+        <!--<activity
             android:name="br.gov.ma.detran.futronictech.FtrScanUsbHostActivity"
             android:label="@string/title_activity_ftr_scan_usb_host"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
@@ -79,7 +81,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".views.AplicarProvaActivity" />
         </activity>
-        <activity android:name="br.gov.ma.detran.futronictech.SelectFileFormatActivity" />
+        <activity android:name="br.gov.ma.detran.futronictech.SelectFileFormatActivity" />-->
     </application>
 
 </manifest>
