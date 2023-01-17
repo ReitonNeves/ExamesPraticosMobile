@@ -190,7 +190,8 @@ public class AplicarProvaActivity extends AppCompatActivity {
                 mTextRenachCandidato.setText(agcProvaCandidato.getRenach());
                 mTextCFC.setText(agcProvaCandidato.getNomeCfc());
 
-                preencherListaDeFaltas(agcProvaCandidato.getCpfCandidato(), agcProvaCandidato.getTipoExame(), "L");
+                preencherListaDeFaltas(agcProvaCandidato.getCpfCandidato(), agcProvaCandidato.getTipoExame(), "E");
+                mBotaoEliminatoria.setBackgroundColor(getColor(R.color.colorPrimaryDark));
 
                 preencherHeader_AplicarProva(agcProvaCandidato.getCpfCandidato(), agcProvaCandidato.getDataExame(), agcProvaCandidato.getLocalExame(), agcProvaCandidato.getTipoExame(), "L");
                 preencherHeader_AplicarProva(agcProvaCandidato.getCpfCandidato(), agcProvaCandidato.getDataExame(), agcProvaCandidato.getLocalExame(), agcProvaCandidato.getTipoExame(), "M");
