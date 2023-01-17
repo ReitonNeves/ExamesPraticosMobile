@@ -542,6 +542,12 @@ public class AplicarProvaActivity extends AppCompatActivity {
             }
         });
 
+        view.findViewById(R.id.imageButton5).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                coordenadasCroqui.remove(coordenadasCroqui.size()-1);
+            }
+        });
+
         String mensagemConfirmar = " Caso a falta não esteja especificada na Resolução Contran 789, informe a infração identificada com o artigo, inciso, alínea correspondente no CTB.";
 
         mMensagemConfirmar = view.findViewById(R.id.txtMensagemConfirmar);

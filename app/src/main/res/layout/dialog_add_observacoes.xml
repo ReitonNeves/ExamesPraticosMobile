@@ -47,6 +47,14 @@
         android:layout_weight="1"
         android:orientation="horizontal">
 
+        <ImageButton
+            android:id="@+id/imageButton5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            app:srcCompat="@drawable/ic_baseline_undo_24" />
+
         <Button
             android:id="@+id/btnCancelar"
             android:layout_width="wrap_content"
